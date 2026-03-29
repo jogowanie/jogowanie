@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogowanie – joga w plenerze</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #F5EFE0;
+    --cream2: #EDE4D0;
+    --cream3: #E0D5BC;
+    --navy: #1B2A4A;
+    --navy2: #243558;
+    --navy3: #152038;
+    --gold: #C9A84C;
+    --gold2: #E8C96A;
+    --text: #1B2A4A;
+    --muted: #7A8BA8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* Subtle grain texture overlay */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.5;
+  }
+
+  .page {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 24px 60px;
+    position: relative; z-index: 1;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding-top: 56px;
+    text-align: center;
+    margin-bottom: 44px;
+    animation: fadeUp 0.9s ease both;
+  }
+
+  /* Sun rays logo */
+  .logo-mark {
+    width: 90px; height: 90px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+  .sun-rays {
+    width: 100%; height: 100%;
+    animation: rotateSlow 30s linear infinite;
+  }
+  .sun-rays line {
+    stroke: var(--navy);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+  .sun-center {
+    position: absolute;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 2px; height: 45%;
+    background: var(--navy);
+    transform-origin: bottom center;
+  }
+
+  .brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px;
+    font-weight: 300;
+    letter-spacing: 3px;
+    color: var(--navy);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .brand-tagline {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  /* Divider */
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 0 auto 20px;
+    width: 200px;
+  }
+  .divider-line { flex: 1; height: 1px; background: var(--cream3); }
+  .divider-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+
+  .hero-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--navy2);
+    line-height: 1.7;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+
+  /* ===== ABOUT ===== */
+  .about-card {
+    background: var(--navy);
+    border-radius: 24px;
+    padding: 28px 28px;
+    margin-bottom: 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  .about-card::before {
+    content: '☽';
+    position: absolute;
+    font-size: 120px;
+    right: -10px; top: -20px;
+    opacity: 0.04;
+    line-height: 1;
+  }
+  .about-label {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .about-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300;
+    color: var(--cream);
+    line-height: 1.75;
+    font-style: italic;
+  }
+  .about-text strong {
+    font-style: normal; font-weight: 600;
+    color: var(--gold2);
+  }
+
+  /* ===== SECTION TITLE ===== */
+  .section-title {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 3.5px; text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-left: 4px;
+    animation: fadeUp 0.9s 0.2s ease both;
+  }
+
+  /* ===== EVENTS ===== */
+  .events-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .event-item {
+    background: white;
+    border-radius: 18px;
+    padding: 18px 20px;
+    display: flex; align-items: center; gap: 16px;
+    border: 1px solid var(--cream3);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    animation: fadeUp 0.8s ease both;
+  }
+  .event-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.1); }
+  .event-item:nth-child(1) { animation-delay: 0.25s; }
+  .event-item:nth-child(2) { animation-delay: 0.32s; }
+  .event-item:nth-child(3) { animation-delay: 0.39s; }
+  .event-item:nth-child(4) { animation-delay: 0.46s; }
+
+  .event-date-box {
+    flex-shrink: 0;
+    width: 48px; height: 54px;
+    background: var(--navy);
+    border-radius: 12px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1px;
+  }
+  .event-date-box .day {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--cream);
+    line-height: 1;
+  }
+  .event-date-box .month {
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .event-body { flex: 1; min-width: 0; }
+  .event-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.2;
+  }
+  .event-meta {
+    font-size: 11px; color: var(--muted);
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .event-meta span { display: flex; align-items: center; gap: 3px; }
+
+  .event-badge {
+    flex-shrink: 0;
+    font-size: 10px; font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+  .badge-free { background: #E8F5E9; color: #2E7D32; }
+  .badge-paid { background: var(--cream2); color: var(--navy); }
+  .badge-new { background: var(--navy); color: var(--gold2); }
+
+  /* ===== MAIN LINKS ===== */
+  .links-list {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .main-link {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    text-decoration: none;
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 0.5px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    animation: fadeUp 0.8s ease both;
+  }
+  .main-link:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.15); }
+  .main-link:nth-child(1) { animation-delay: 0.5s; }
+  .main-link:nth-child(2) { animation-delay: 0.57s; }
+
+  .link-primary {
+    background: var(--navy);
+    color: var(--cream);
+    border: 1px solid var(--navy2);
+  }
+  .link-secondary {
+    background: white;
+    color: var(--navy);
+    border: 1px solid var(--cream3);
+  }
+
+  .link-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .link-primary .link-icon { background: rgba(255,255,255,0.1); }
+  .link-secondary .link-icon { background: var(--cream2); }
+
+  .link-text { flex: 1; }
+  .link-text strong { display: block; font-weight: 600; margin-bottom: 1px; }
+  .link-text small { font-size: 11px; opacity: 0.6; font-weight: 400; }
+
+  .link-arrow { font-size: 16px; opacity: 0.4; }
+
+  /* ===== SOCIAL ===== */
+  .social-row {
+    display: flex; gap: 10px;
+    margin-bottom: 40px;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+
+  .social-btn {
+    flex: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    border: 1px solid var(--cream3);
+    background: white;
+    color: var(--navy);
+  }
+  .social-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(27,42,74,0.1); }
+  .social-btn span:first-child { font-size: 20px; }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    animation: fadeUp 0.8s 0.7s ease both;
+  }
+  .footer .divider { width: 120px; margin-bottom: 16px; }
+  .footer p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px; font-style: italic;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .footer small {
+    font-size: 10px; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--cream3);
+  }
+
+  /* ===== ANIMATIONS ===== */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes rotateSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* ===== UPCOMING BADGE ===== */
+  .upcoming-count {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--navy);
+    color: var(--gold2);
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 2px; text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    animation: fadeUp 0.9s 0.05s ease both;
+  }
+  .upcoming-count .dot {
+    width: 6px; height: 6px;
+    background: var(--gold2);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HERO -->
+  <div class="hero">
+    <!-- Sun/rays logo mark (SVG) -->
+    <div class="logo-mark">
+      <svg class="sun-rays" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Half-sun rays from center-bottom -->
+        <g transform="translate(50,88)">
+          <line x1="0" y1="0" x2="0" y2="-72" transform="rotate(-90)"/>
+          <line x1="0" y1="0" x2="0" y2="-70" transform="rotate(-78)"/>
+          <line x1="0" y1="0" x2="0" y2="-66" transform="rotate(-66)"/>
+          <line x1="0" y1="0" x2="0" y2="-60" transform="rotate(-54)"/>
+          <line x1="0" y1="0" x2="0" y2="-54" transform="rotate(-42)"/>
+          <line x1="0" y1="0" x2="0" y2="-48" transform="rotate(-30)"/>
+          <line x1="0" y1="0" x2="0" y2="-44" transform="rotate(-18)"/>
+          <line x1="0" y1="0" x2="0" y2="-42" transform="rotate(-6)"/>
+          <line x1="0" y1="0" x2="0" y2="-42" transform="rotate(6)"/>
+          <line x1="0" y1="0" x2="0" y2="-44" transform="rotate(18)"/>
+          <line x1="0" y1="0" x2="0" y2="-48" transform="rotate(30)"/>
+          <line x1="0" y1="0" x2="0" y2="-54" transform="rotate(42)"/>
+          <line x1="0" y1="0" x2="0" y2="-60" transform="rotate(54)"/>
+          <line x1="0" y1="0" x2="0" y2="-66" transform="rotate(66)"/>
+          <line x1="0" y1="0" x2="0" y2="-70" transform="rotate(78)"/>
+          <line x1="0" y1="0" x2="0" y2="-72" transform="rotate(90)"/>
+        </g>
+        <!-- Horizon line -->
+        <line x1="8" y1="88" x2="92" y2="88" stroke="#1B2A4A" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="brand-name">jogowanie</div>
+    <div class="brand-tagline">joga w plenerze · Polska</div>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <div class="divider-dot"></div>
+      <div class="divider-line"></div>
+    </div>
+
+    <p class="hero-desc">Łączymy joginów z naturą.<br>Bezpłatne i płatne zajęcia<br>w parkach i plenerach całej Polski.</p>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about-card">
+    <div class="about-label">✦ O nas</div>
+    <p class="about-text">
+      <strong>Jogowanie</strong> to społeczność ludzi, którzy wierzą, że najlepsza mata to trawa pod stopami. Zbieramy i publikujemy plenerowe wydarzenia jogowe z całej Polski – od porannych sesji o wschodzie słońca, po weekendowe retreaty w górach.
+    </p>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="upcoming-count">
+    <div class="dot"></div>
+    Kwiecień 2026 · 24 wydarzenia
+  </div>
+
+  <div class="section-title">Nadchodzące wydarzenia</div>
+
+  <div class="events-list">
+    <a class="event-item" href="#">
+      <div class="event-date-box">
+        <div class="day">5</div>
+        <div class="month">Kwi</div>
+      </div>
+      <div class="event-body">
+        <div class="event-name">Joga w Parku Jordana</div>
+        <div class="event-meta">
+          <span>📍 Kraków</span>
+          <span>🕗 8:00–9:30</span>
+        </div>
+      </div>
+      <div class="event-badge badge-free">Gratis</div>
+    </a>
+
+    <a class="event-item" href="#">
+      <div class="event-date-box">
+        <div class="day">6</div>
+        <div class="month">Kwi</div>
+      </div>
+      <div class="event-body">
+        <div class="event-name">Sunrise Yoga – Bulwary Wiślane</div>
+        <div class="event-meta">
+          <span>📍 Warszawa</span>
+          <span>🕕 6:30–8:00</span>
+        </div>
+      </div>
+      <div class="event-badge badge-paid">20 zł</div>
+    </a>
+
+    <a class="event-item" href="#">
+      <div class="event-date-box">
+        <div class="day">12</div>
+        <div class="month">Kwi</div>
+      </div>
+      <div class="event-body">
+        <div class="event-name">Joga przy Fontannie – Hala Stulecia</div>
+        <div class="event-meta">
+          <span>📍 Wrocław</span>
+          <span>🕙 10:00–11:00</span>
+        </div>
+      </div>
+      <div class="event-badge badge-new">Nowe</div>
+    </a>
+
+    <a class="event-item" href="#">
+      <div class="event-date-box">
+        <div class="day">18</div>
+        <div class="month">Kwi</div>
+      </div>
+      <div class="event-body">
+        <div class="event-name">Joga na trawie – Wyspa Sobieszewska</div>
+        <div class="event-meta">
+          <span>📍 Gdańsk</span>
+          <span>🕙 10:00–11:30</span>
+        </div>
+      </div>
+      <div class="event-badge badge-free">Gratis</div>
+    </a>
+  </div>
+
+  <!-- MAIN LINKS -->
+  <div class="section-title">Linki</div>
+  <div class="links-list">
+    <a class="main-link link-primary" href="#">
+      <div class="link-icon">📋</div>
+      <div class="link-text">
+        <strong>Zgłoś swoje wydarzenie</strong>
+        <small>Formularz dla organizatorów</small>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+    <a class="main-link link-secondary" href="#">
+      <div class="link-icon">🗺️</div>
+      <div class="link-text">
+        <strong>Wszystkie wydarzenia na mapie</strong>
+        <small>24 eventi w kwietniu</small>
+      </div>
+      <div class="link-arrow">→</div>
+    </a>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="section-title">Social media</div>
+  <div class="social-row">
+    <a class="social-btn" href="#">
+      <span>📸</span>
+      <span>Instagram</span>
+    </a>
+    <a class="social-btn" href="#">
+      <span>👥</span>
+      <span>Facebook</span>
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="divider" style="margin:0 auto 16px;">
+      <div class="divider-line"></div>
+      <div class="divider-dot"></div>
+      <div class="divider-line"></div>
+    </div>
+    <p>Oddychaj. Rozciągaj się. Joguj.</p>
+    <small>© 2026 Jogowanie</small>
+  </div>
+
+</div>
+</body>
+</html>
