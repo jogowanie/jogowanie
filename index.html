@@ -5,330 +5,109 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Jogowanie – joga nie tylko w plenerze</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <style>
   :root {
-    --cream: #F5EFE0;
-    --cream2: #EDE4D0;
-    --cream3: #E0D5BC;
-    --navy: #1B2A4A;
-    --navy2: #243558;
-    --navy3: #152038;
-    --gold: #C9A84C;
-    --gold2: #E8C96A;
-    --text: #1B2A4A;
-    --muted: #7A8BA8;
+    --cream: #F5EFE0; --cream2: #EDE4D0; --cream3: #E0D5BC;
+    --navy: #1B2A4A; --navy2: #243558;
+    --gold: #C9A84C; --gold2: #E8C96A; --muted: #7A8BA8;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'Jost', sans-serif;
-    background: var(--cream);
-    color: var(--text);
-    min-height: 100vh;
-    position: relative;
-    overflow-x: hidden;
-  }
-
-  /* Subtle grain texture overlay */
+  body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--navy); min-height: 100vh; overflow-x: hidden; }
   body::before {
-    content: '';
-    position: fixed; inset: 0;
+    content: ''; position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
     pointer-events: none; z-index: 0; opacity: 0.5;
   }
+  .page { max-width: 480px; margin: 0 auto; padding: 0 24px 60px; position: relative; z-index: 1; }
 
-  .page {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 24px 60px;
-    position: relative; z-index: 1;
-  }
-
-  /* ===== HERO ===== */
-  .hero {
-    padding-top: 56px;
-    text-align: center;
-    margin-bottom: 44px;
-    animation: fadeUp 0.9s ease both;
-  }
-
-  /* Sun rays logo */
-  .logo-mark {
-    width: 90px; height: 90px;
-    margin: 0 auto 20px;
-    position: relative;
-  }
-  .sun-rays {
-    width: 100%; height: 100%;
-    animation: rotateSlow 30s linear infinite;
-  }
-  .sun-rays line {
-    stroke: var(--navy);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-  }
-  .sun-center {
-    position: absolute;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 2px; height: 45%;
-    background: var(--navy);
-    transform-origin: bottom center;
-  }
-
-  .brand-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 52px;
-    font-weight: 300;
-    letter-spacing: 3px;
-    color: var(--navy);
-    line-height: 1;
-    margin-bottom: 6px;
-  }
-  .brand-tagline {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 20px;
-  }
-
-  /* Divider */
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 0 auto 20px;
-    width: 200px;
-  }
+  /* HERO */
+  .hero { padding-top: 56px; text-align: center; margin-bottom: 44px; animation: fadeUp 0.9s ease both; }
+  .logo-mark { width: 90px; height: 90px; margin: 0 auto 20px; }
+  .sun-rays { width: 100%; height: 100%; animation: rotateSlow 30s linear infinite; }
+  .sun-rays line { stroke: var(--navy); stroke-width: 1.5; stroke-linecap: round; }
+  .brand-name { font-family: 'Cormorant Garamond', serif; font-size: 52px; font-weight: 300; letter-spacing: 3px; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+  .brand-tagline { font-size: 11px; font-weight: 500; letter-spacing: 4px; text-transform: uppercase; color: var(--muted); margin-bottom: 20px; }
+  .divider { display: flex; align-items: center; gap: 12px; margin: 0 auto 20px; width: 200px; }
   .divider-line { flex: 1; height: 1px; background: var(--cream3); }
   .divider-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
+  .hero-desc { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; font-weight: 300; color: var(--navy2); line-height: 1.7; max-width: 300px; margin: 0 auto; }
 
-  .hero-desc {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px;
-    font-style: italic;
-    font-weight: 300;
-    color: var(--navy2);
-    line-height: 1.7;
-    max-width: 300px;
-    margin: 0 auto;
-  }
+  /* ABOUT */
+  .about-card { background: var(--navy); border-radius: 24px; padding: 28px; margin-bottom: 28px; position: relative; overflow: hidden; animation: fadeUp 0.9s 0.1s ease both; }
+  .about-card::before { content: '☽'; position: absolute; font-size: 120px; right: -10px; top: -20px; opacity: 0.04; line-height: 1; }
+  .about-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+  .about-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; color: var(--cream); line-height: 1.75; font-style: italic; }
+  .about-text strong { font-style: normal; font-weight: 600; color: var(--gold2); }
 
-  /* ===== ABOUT ===== */
-  .about-card {
-    background: var(--navy);
-    border-radius: 24px;
-    padding: 28px 28px;
-    margin-bottom: 28px;
-    position: relative;
-    overflow: hidden;
-    animation: fadeUp 0.9s 0.1s ease both;
-  }
-  .about-card::before {
-    content: '☽';
-    position: absolute;
-    font-size: 120px;
-    right: -10px; top: -20px;
-    opacity: 0.04;
-    line-height: 1;
-  }
-  .about-label {
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 3px; text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 10px;
-  }
-  .about-text {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 18px; font-weight: 300;
-    color: var(--cream);
-    line-height: 1.75;
-    font-style: italic;
-  }
-  .about-text strong {
-    font-style: normal; font-weight: 600;
-    color: var(--gold2);
-  }
+  /* SECTION TITLE */
+  .section-title { font-size: 10px; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-left: 4px; animation: fadeUp 0.9s 0.2s ease both; }
 
-  /* ===== SECTION TITLE ===== */
-  .section-title {
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 3.5px; text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 14px;
-    padding-left: 4px;
-    animation: fadeUp 0.9s 0.2s ease both;
-  }
-
-  /* ===== EVENTS ===== */
-  .events-list {
-    display: flex; flex-direction: column; gap: 10px;
-    margin-bottom: 28px;
-  }
-
-  .event-item {
-    background: white;
-    border-radius: 18px;
-    padding: 18px 20px;
-    display: flex; align-items: center; gap: 16px;
-    border: 1px solid var(--cream3);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    text-decoration: none;
-    color: inherit;
-    animation: fadeUp 0.8s ease both;
-  }
+  /* EVENTS */
+  .upcoming-count { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: var(--gold2); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 24px; animation: fadeUp 0.9s 0.05s ease both; }
+  .upcoming-count .dot { width: 6px; height: 6px; background: var(--gold2); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+  .events-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
+  .event-item { background: white; border-radius: 18px; padding: 18px 20px; display: flex; align-items: center; gap: 16px; border: 1px solid var(--cream3); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; text-decoration: none; color: inherit; animation: fadeUp 0.8s ease both; }
   .event-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.1); }
-  .event-item:nth-child(1) { animation-delay: 0.25s; }
-  .event-item:nth-child(2) { animation-delay: 0.32s; }
-  .event-item:nth-child(3) { animation-delay: 0.39s; }
-  .event-item:nth-child(4) { animation-delay: 0.46s; }
-
-  .event-date-box {
-    flex-shrink: 0;
-    width: 48px; height: 54px;
-    background: var(--navy);
-    border-radius: 12px;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 1px;
-  }
-  .event-date-box .day {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 600;
-    color: var(--cream);
-    line-height: 1;
-  }
-  .event-date-box .month {
-    font-size: 9px; font-weight: 500;
-    letter-spacing: 1.5px; text-transform: uppercase;
-    color: var(--gold);
-  }
-
+  .event-date-box { flex-shrink: 0; width: 48px; height: 54px; background: var(--navy); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+  .event-date-box .day { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--cream); line-height: 1; }
+  .event-date-box .month { font-size: 9px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
   .event-body { flex: 1; min-width: 0; }
-  .event-name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 17px; font-weight: 600;
-    color: var(--navy);
-    margin-bottom: 4px;
-    line-height: 1.2;
-  }
-  .event-meta {
-    font-size: 11px; color: var(--muted);
-    display: flex; flex-wrap: wrap; gap: 8px;
-  }
-  .event-meta span { display: flex; align-items: center; gap: 3px; }
-
-  .event-badge {
-    flex-shrink: 0;
-    font-size: 10px; font-weight: 600;
-    padding: 4px 10px;
-    border-radius: 20px;
-    letter-spacing: 0.5px;
-  }
+  .event-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 4px; line-height: 1.2; }
+  .event-meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; }
+  .event-badge { flex-shrink: 0; font-size: 10px; font-weight: 600; padding: 4px 10px; border-radius: 20px; letter-spacing: 0.5px; }
   .badge-free { background: #E8F5E9; color: #2E7D32; }
   .badge-paid { background: var(--cream2); color: var(--navy); }
   .badge-new { background: var(--navy); color: var(--gold2); }
 
-  /* ===== MAIN LINKS ===== */
-  .links-list {
-    display: flex; flex-direction: column; gap: 10px;
-    margin-bottom: 28px;
-  }
+  /* STATES */
+  .loading-state, .empty-state, .error-state { text-align: center; padding: 32px 20px; background: white; border-radius: 18px; border: 1px solid var(--cream3); margin-bottom: 28px; }
+  .loading-state p { color: var(--muted); font-size: 14px; font-style: italic; }
+  .loading-dots { display: inline-flex; gap: 6px; margin-bottom: 10px; }
+  .loading-dots span { width: 8px; height: 8px; background: var(--navy); border-radius: 50%; opacity: 0.3; animation: blink 1.2s ease-in-out infinite; }
+  .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+  .empty-state .emoji { font-size: 32px; margin-bottom: 10px; }
+  .empty-state p, .error-state p { font-size: 13px; color: var(--muted); }
+  .error-state p { color: #c0392b; }
 
-  .main-link {
-    display: flex; align-items: center; gap: 16px;
-    padding: 18px 22px;
-    border-radius: 18px;
-    text-decoration: none;
-    font-size: 14px; font-weight: 500;
-    letter-spacing: 0.5px;
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: pointer;
-    animation: fadeUp 0.8s ease both;
-  }
+  /* MAP */
+  .map-wrapper { border-radius: 24px; overflow: hidden; border: 1px solid var(--cream3); margin-bottom: 28px; box-shadow: 0 4px 24px rgba(27,42,74,0.08); animation: fadeUp 0.9s 0.3s ease both; }
+  .map-header { background: var(--navy); padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
+  .map-header-icon { font-size: 20px; }
+  .map-header-text p { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--cream); }
+  .map-header-text small { font-size: 10px; color: var(--gold); letter-spacing: 1px; }
+  #map { height: 300px; width: 100%; }
+  .map-hint { background: white; padding: 10px 16px; font-size: 11px; color: var(--muted); text-align: center; }
+
+  /* Leaflet popup */
+  .leaflet-popup-content-wrapper { border-radius: 14px !important; box-shadow: 0 8px 24px rgba(27,42,74,0.15) !important; }
+  .leaflet-popup-content { margin: 14px 16px !important; font-family: 'Jost', sans-serif !important; }
+  .popup-title { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 5px; }
+  .popup-meta { font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .popup-badge { display: inline-block; margin-top: 6px; font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 10px; }
+  .popup-link { display: inline-block; margin-top: 7px; font-size: 11px; font-weight: 600; color: var(--navy); text-decoration: none; }
+
+  /* LINKS */
+  .links-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
+  .main-link { display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-radius: 18px; text-decoration: none; font-size: 14px; font-weight: 500; letter-spacing: 0.5px; transition: transform 0.2s, box-shadow 0.2s; animation: fadeUp 0.8s 0.5s ease both; }
   .main-link:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.15); }
-  .main-link:nth-child(1) { animation-delay: 0.5s; }
-  .main-link:nth-child(2) { animation-delay: 0.57s; }
-
-  .link-primary {
-    background: var(--navy);
-    color: var(--cream);
-    border: 1px solid var(--navy2);
-  }
-  .link-secondary {
-    background: white;
-    color: var(--navy);
-    border: 1px solid var(--cream3);
-  }
-
-  .link-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-  .link-primary .link-icon { background: rgba(255,255,255,0.1); }
-  .link-secondary .link-icon { background: var(--cream2); }
-
+  .link-primary { background: var(--navy); color: var(--cream); border: 1px solid var(--navy2); }
+  .link-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; background: rgba(255,255,255,0.1); }
   .link-text { flex: 1; }
   .link-text strong { display: block; font-weight: 600; margin-bottom: 1px; }
   .link-text small { font-size: 11px; opacity: 0.6; font-weight: 400; }
-
   .link-arrow { font-size: 16px; opacity: 0.4; }
 
+  /* FOOTER */
+  .footer { text-align: center; animation: fadeUp 0.8s 0.7s ease both; }
+  .footer p { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-style: italic; color: var(--muted); margin-bottom: 6px; }
+  .footer small { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--cream3); }
 
-  /* ===== FOOTER ===== */
-  .footer {
-    text-align: center;
-    animation: fadeUp 0.8s 0.7s ease both;
-  }
-  .footer .divider { width: 120px; margin-bottom: 16px; }
-  .footer p {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 13px; font-style: italic;
-    color: var(--muted);
-    margin-bottom: 6px;
-  }
-  .footer small {
-    font-size: 10px; letter-spacing: 2px;
-    text-transform: uppercase; color: var(--cream3);
-  }
-
-  /* ===== ANIMATIONS ===== */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes rotateSlow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* ===== UPCOMING BADGE ===== */
-  .upcoming-count {
-    display: inline-flex; align-items: center; gap: 6px;
-    background: var(--navy);
-    color: var(--gold2);
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 2px; text-transform: uppercase;
-    padding: 6px 14px;
-    border-radius: 20px;
-    margin-bottom: 24px;
-    animation: fadeUp 0.9s 0.05s ease both;
-  }
-  .upcoming-count .dot {
-    width: 6px; height: 6px;
-    background: var(--gold2);
-    border-radius: 50%;
-    animation: pulse 2s ease-in-out infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.7); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+  @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
 </style>
 </head>
 <body>
@@ -336,10 +115,8 @@
 
   <!-- HERO -->
   <div class="hero">
-    <!-- Sun/rays logo mark (SVG) -->
     <div class="logo-mark">
       <svg class="sun-rays" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-        <!-- Half-sun rays from center-bottom -->
         <g transform="translate(50,88)">
           <line x1="0" y1="0" x2="0" y2="-72" transform="rotate(-90)"/>
           <line x1="0" y1="0" x2="0" y2="-70" transform="rotate(-78)"/>
@@ -358,105 +135,49 @@
           <line x1="0" y1="0" x2="0" y2="-70" transform="rotate(78)"/>
           <line x1="0" y1="0" x2="0" y2="-72" transform="rotate(90)"/>
         </g>
-        <!-- Horizon line -->
         <line x1="8" y1="88" x2="92" y2="88" stroke="#1B2A4A" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </div>
-
     <div class="brand-name">jogowanie</div>
     <div class="brand-tagline">wydarzenia jogowe dla Ciebie</div>
-
-    <div class="divider">
-      <div class="divider-line"></div>
-      <div class="divider-dot"></div>
-      <div class="divider-line"></div>
-    </div>
-
+    <div class="divider"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
     <p class="hero-desc">Łączymy joginów.<br>Zajęcia w studiach i w plenerze.</p>
   </div>
 
   <!-- ABOUT -->
   <div class="about-card">
     <div class="about-label">✦ O nas</div>
-    <p class="about-text">
-      <strong>Jogowanie</strong> to społeczność entuzjastów jogi i wspólnej praktyki. Zbieramy i publikujemy wydarzenia jogowe w Twojej okolicy.
-    </p>
+    <p class="about-text"><strong>Jogowanie</strong> to społeczność entuzjastów jogi i wspólnej praktyki. Zbieramy i publikujemy wydarzenia jogowe w Twojej okolicy.</p>
   </div>
 
   <!-- EVENTS -->
-  <div class="upcoming-count">
-    <div class="dot"></div>
-    Kwiecień 2026 · X wydarzenia
-  </div>
-
+  <div class="upcoming-count"><div class="dot"></div><span id="event-count-label">Ładowanie wydarzeń...</span></div>
   <div class="section-title">Nadchodzące wydarzenia</div>
-
-  <div class="events-list">
-    <a class="event-item" href="#">
-      <div class="event-date-box">
-        <div class="day">5</div>
-        <div class="month">Kwi</div>
-      </div>
-      <div class="event-body">
-        <div class="event-name">Joga w Parku Jordana</div>
-        <div class="event-meta">
-          <span>📍 Kraków</span>
-          <span>🕗 8:00–9:30</span>
-        </div>
-      </div>
-      <div class="event-badge badge-free">Gratis</div>
-    </a>
-
-    <a class="event-item" href="#">
-      <div class="event-date-box">
-        <div class="day">6</div>
-        <div class="month">Kwi</div>
-      </div>
-      <div class="event-body">
-        <div class="event-name">Sunrise Yoga – Bulwary Wiślane</div>
-        <div class="event-meta">
-          <span>📍 Warszawa</span>
-          <span>🕕 6:30–8:00</span>
-        </div>
-      </div>
-      <div class="event-badge badge-paid">20 zł</div>
-    </a>
-
-    <a class="event-item" href="#">
-      <div class="event-date-box">
-        <div class="day">12</div>
-        <div class="month">Kwi</div>
-      </div>
-      <div class="event-body">
-        <div class="event-name">Joga przy Fontannie – Hala Stulecia</div>
-        <div class="event-meta">
-          <span>📍 Wrocław</span>
-          <span>🕙 10:00–11:00</span>
-        </div>
-      </div>
-      <div class="event-badge badge-new">Nowe</div>
-    </a>
-
-    <a class="event-item" href="#">
-      <div class="event-date-box">
-        <div class="day">18</div>
-        <div class="month">Kwi</div>
-      </div>
-      <div class="event-body">
-        <div class="event-name">Joga na trawie – Wyspa Sobieszewska</div>
-        <div class="event-meta">
-          <span>📍 Gdańsk</span>
-          <span>🕙 10:00–11:30</span>
-        </div>
-      </div>
-      <div class="event-badge badge-free">Gratis</div>
-    </a>
+  <div class="events-list" id="events-container">
+    <div class="loading-state">
+      <div class="loading-dots"><span></span><span></span><span></span></div>
+      <p>Ładuję wydarzenia z kalendarza…</p>
+    </div>
   </div>
 
-  <!-- MAIN LINKS -->
-  <div class="section-title">Linki</div>
+  <!-- MAP -->
+  <div class="section-title">Mapa wydarzeń</div>
+  <div class="map-wrapper">
+    <div class="map-header">
+      <div class="map-header-icon">🗺️</div>
+      <div class="map-header-text">
+        <p>Gdzie jogujemy?</p>
+        <small id="map-pin-count">Ładowanie pinezek...</small>
+      </div>
+    </div>
+    <div id="map"></div>
+    <div class="map-hint" id="map-hint">Kliknij pinezkę, aby zobaczyć szczegóły</div>
+  </div>
+
+  <!-- LINKS -->
+  <div class="section-title">Dołącz do nas</div>
   <div class="links-list">
-    <a class="main-link link-primary" href="#">
+    <a class="main-link link-primary" href="#" id="link-formularz" target="_blank">
       <div class="link-icon">📋</div>
       <div class="link-text">
         <strong>Zgłoś swoje wydarzenie</strong>
@@ -464,40 +185,146 @@
       </div>
       <div class="link-arrow">→</div>
     </a>
-    <a class="main-link link-secondary" href="#">
-      <div class="link-icon">🗺️</div>
-      <div class="link-text">
-        <strong>Wszystkie wydarzenia na mapie</strong>
-        <small>24 eventi w kwietniu</small>
-      </div>
-      <div class="link-arrow">→</div>
-    </a>
-  </div>
-
-  <!-- SOCIAL -->
-  <div class="section-title">Social media</div>
-  <div class="social-row">
-    <a class="social-btn" href="#">
-      <span>📸</span>
-      <span>Instagram</span>
-    </a>
-    <a class="social-btn" href="#">
-      <span>👥</span>
-      <span>Facebook</span>
-    </a>
   </div>
 
   <!-- FOOTER -->
   <div class="footer">
-    <div class="divider" style="margin:0 auto 16px;">
-      <div class="divider-line"></div>
-      <div class="divider-dot"></div>
-      <div class="divider-line"></div>
-    </div>
+    <div class="divider" style="margin:0 auto 16px;"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
     <p>Oddychaj. Rozciągaj się. Joguj.</p>
     <small>© 2026 Jogowanie</small>
   </div>
 
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script>
+  // ============================================================
+  // KONFIGURACJA – zmień tutaj swoje linki!
+  // ============================================================
+  const CONFIG = {
+    sheetsCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqguyRo9UM1S4qJS9xD_sYl9IizlH3p91hpO6hbu34gmw5BP9vRxbDbSYkBG_xF5apBoNBEVHT5dTe/pub?output=csv",
+    formularz: "#",  // ← wklej tu link do swojego Google Forms
+  };
+  // ============================================================
+
+  document.getElementById('link-formularz').href = CONFIG.formularz;
+
+  // Inicjalizacja mapy – centrum Polski
+  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([52.0, 19.5], 5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
+  }).addTo(map);
+
+  // Ikona pinezki
+  const yogaIcon = L.divIcon({
+    className: '',
+    html: `<div style="width:34px;height:34px;background:#1B2A4A;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #E8C96A;box-shadow:0 3px 10px rgba(27,42,74,0.35);display:flex;align-items:center;justify-content:center;"><span style="transform:rotate(45deg);font-size:15px;line-height:30px;display:block;text-align:center;">🧘</span></div>`,
+    iconSize: [34, 34], iconAnchor: [17, 34], popupAnchor: [0, -38]
+  });
+
+  // Parsowanie CSV
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    if (lines.length < 2) return [];
+    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
+    return lines.slice(1).map(line => {
+      const cols = []; let cur = '', inQ = false;
+      for (let ch of line) {
+        if (ch === '"') inQ = !inQ;
+        else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+        else cur += ch;
+      }
+      cols.push(cur.trim());
+      const obj = {};
+      headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/"/g, '').trim());
+      return obj;
+    }).filter(row => row.nazwa && row.nazwa.length > 0);
+  }
+
+  function getBadge(event) {
+    if (event.typ === 'free') return { style: 'background:#E8F5E9;color:#2E7D32', text: 'Gratis', cls: 'badge-free' };
+    if (event.typ === 'new') return { style: 'background:#1B2A4A;color:#E8C96A', text: 'Nowe', cls: 'badge-new' };
+    return { style: 'background:#EDE4D0;color:#1B2A4A', text: event.cena || 'Płatne', cls: 'badge-paid' };
+  }
+
+  function createEventCard(event, index) {
+    const b = getBadge(event);
+    return `
+      <a class="event-item" href="${event.link || '#'}" style="animation-delay:${0.25 + index * 0.07}s" ${event.link && event.link !== '#' ? 'target="_blank"' : ''}>
+        <div class="event-date-box"><div class="day">${event.dzien || '?'}</div><div class="month">${event.miesiac || '?'}</div></div>
+        <div class="event-body">
+          <div class="event-name">${event.nazwa}</div>
+          <div class="event-meta">
+            ${event.miasto ? `<span>📍 ${event.miasto}</span>` : ''}
+            ${event.godzina ? `<span>🕐 ${event.godzina}</span>` : ''}
+          </div>
+        </div>
+        <div class="event-badge ${b.cls}">${b.text}</div>
+      </a>`;
+  }
+
+  function createPopup(event) {
+    const b = getBadge(event);
+    return `
+      <div class="popup-title">${event.nazwa}</div>
+      <div class="popup-meta">
+        📅 ${event.dzien || ''} ${event.miesiac || ''}<br>
+        ${event.godzina ? `🕐 ${event.godzina}<br>` : ''}
+        📍 ${event.lokalizacja || event.miasto || ''}
+      </div>
+      <span class="popup-badge" style="${b.style}">${b.text}</span>
+      ${event.link && event.link !== '#' ? `<br><a class="popup-link" href="${event.link}" target="_blank">Więcej info →</a>` : ''}`;
+  }
+
+  async function loadAll() {
+    const container = document.getElementById('events-container');
+    const countLabel = document.getElementById('event-count-label');
+    const pinCount = document.getElementById('map-pin-count');
+    const mapHint = document.getElementById('map-hint');
+
+    try {
+      const res = await fetch(CONFIG.sheetsCSV);
+      if (!res.ok) throw new Error('Błąd pobierania');
+      const events = parseCSV(await res.text());
+
+      if (events.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="emoji">🌿</div><p>Brak wydarzeń.<br>Dodaj pierwsze wydarzenie do Google Sheets!</p></div>`;
+        countLabel.textContent = 'Brak wydarzeń';
+        pinCount.textContent = 'Brak pinezek';
+        return;
+      }
+
+      container.innerHTML = events.map((e, i) => createEventCard(e, i)).join('');
+      countLabel.textContent = `${events.length} wydarzeń w kalendarzu`;
+
+      // Pinezki na mapie
+      let pins = 0;
+      const bounds = [];
+      events.forEach(ev => {
+        const lat = parseFloat(ev.lat), lng = parseFloat(ev.lng);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          L.marker([lat, lng], { icon: yogaIcon }).addTo(map)
+           .bindPopup(createPopup(ev), { maxWidth: 230 });
+          bounds.push([lat, lng]);
+          pins++;
+        }
+      });
+
+      if (pins > 0) {
+        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+        pinCount.textContent = `${pins} wydarzeń na mapie`;
+      } else {
+        pinCount.textContent = 'Dodaj kolumny lat i lng do arkusza';
+        mapHint.innerHTML = '📌 Aby pinezki się pojawiły, dodaj kolumny <b>lat</b> i <b>lng</b> do swojego Google Sheets (jak to zrobić – zapytaj mnie!)';
+      }
+
+    } catch (err) {
+      container.innerHTML = `<div class="error-state"><p>⚠️ Nie udało się załadować wydarzeń.<br>Sprawdź czy arkusz Google Sheets jest opublikowany.</p></div>`;
+      countLabel.textContent = 'Błąd ładowania';
+    }
+  }
+
+  loadAll();
+</script>
 </body>
 </html>
