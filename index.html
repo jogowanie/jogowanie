@@ -31,7 +31,7 @@
   }
   .page { max-width: 480px; margin: 0 auto; padding: 0 24px 60px; position: relative; z-index: 1; }
 
-  /* HERO */
+  /* ─── HERO ─── */
   .hero { padding-top: 56px; text-align: center; margin-bottom: 44px; animation: fadeUp 0.9s ease both; }
   .logo-mark { width: 90px; height: 90px; margin: 0 auto 20px; }
   .sun-rays { width: 100%; height: 100%; animation: rotateSlow 30s linear infinite; }
@@ -43,36 +43,186 @@
   .divider-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; }
   .hero-desc { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-style: italic; font-weight: 300; color: var(--navy2); line-height: 1.7; max-width: 300px; margin: 0 auto; }
 
-  /* ABOUT */
+  /* ─── ABOUT ─── */
   .about-card { background: var(--navy); border-radius: 24px; padding: 28px; margin-bottom: 28px; position: relative; overflow: hidden; animation: fadeUp 0.9s 0.1s ease both; }
   .about-card::before { content: '☽'; position: absolute; font-size: 120px; right: -10px; top: -20px; opacity: 0.04; line-height: 1; }
   .about-label { font-size: 10px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
   .about-text { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 300; color: var(--cream); line-height: 1.75; font-style: italic; }
   .about-text strong { font-style: normal; font-weight: 600; color: var(--gold2); }
 
-  /* SECTION TITLE */
-  .section-title { font-size: 10px; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; padding-left: 4px; animation: fadeUp 0.9s 0.2s ease both; }
+  /* ─── MAIN TABS ─── */
+  .main-tabs-wrap { margin-bottom: 28px; animation: fadeUp 0.9s 0.15s ease both; }
+  .main-tabs {
+    display: flex;
+    background: var(--navy);
+    border-radius: 18px;
+    padding: 5px;
+    gap: 4px;
+  }
+  .main-tab {
+    flex: 1;
+    padding: 11px 8px;
+    border-radius: 13px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: rgba(255,255,255,0.45);
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    user-select: none;
+    line-height: 1.3;
+  }
+  .main-tab.active {
+    background: var(--gold);
+    color: var(--navy);
+  }
+  .main-tab .tab-sub {
+    display: block;
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.75;
+    margin-top: 2px;
+  }
+  .main-tab.active .tab-sub { opacity: 0.7; }
 
-  /* EVENTS */
+  /* ─── VIEWS ─── */
+  .tab-view { display: none; }
+  .tab-view.visible { display: block; }
+
+  /* ─── SECTION TITLE ─── */
+  .section-title {
+    font-size: 10px; font-weight: 600; letter-spacing: 3.5px;
+    text-transform: uppercase; color: var(--muted);
+    margin-bottom: 14px; padding-left: 4px;
+    animation: fadeUp 0.9s 0.2s ease both;
+  }
+
+  /* ─── CITY ANCHOR BAR ─── */
+  .city-anchor-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 24px;
+    scrollbar-width: none;
+    animation: fadeUp 0.9s 0.18s ease both;
+  }
+  .city-anchor-bar::-webkit-scrollbar { display: none; }
+  .city-anchor-btn {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--cream3);
+    background: white;
+    color: var(--navy);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+    white-space: nowrap;
+  }
+  .city-anchor-btn:hover,
+  .city-anchor-btn.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--cream);
+  }
+
+  /* ─── UPCOMING COUNT ─── */
   .upcoming-count { display: inline-flex; align-items: center; gap: 6px; background: var(--navy); color: var(--gold2); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; padding: 6px 14px; border-radius: 20px; margin-bottom: 24px; animation: fadeUp 0.9s 0.05s ease both; }
   .upcoming-count .dot { width: 6px; height: 6px; background: var(--gold2); border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
-  .events-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
 
+  /* ─── CITY SECTION ─── */
+  .city-section { margin-bottom: 32px; }
+  .city-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .city-section-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+  .city-section-count {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .city-section-line {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold) 0%, transparent 100%);
+    margin-bottom: 14px;
+    border-radius: 1px;
+  }
+
+  /* ─── HORIZONTAL SCROLL CARDS (bezpłatne) ─── */
+  .h-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    scrollbar-width: none;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .h-scroll::-webkit-scrollbar { display: none; }
+
+  /* ─── EVENT CARD (horizontal) ─── */
+  .event-hcard {
+    flex-shrink: 0;
+    width: 230px;
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    border: 1px solid var(--cream3);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .event-hcard:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.1); }
+
+  .event-hcard-top { display: flex; align-items: flex-start; gap: 10px; }
+  .event-date-box { flex-shrink: 0; width: 44px; height: 50px; background: var(--navy); border-radius: 11px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; }
+  .event-date-box .day { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); line-height: 1; }
+  .event-date-box .month { font-size: 8px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
+
+  .event-hcard-info { flex: 1; min-width: 0; }
+  .event-hcard-name { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: var(--navy); line-height: 1.25; margin-bottom: 5px; }
+  .event-hcard-meta { font-size: 10px; color: var(--muted); display: flex; flex-direction: column; gap: 3px; }
+  .event-hcard-meta span { display: flex; align-items: center; gap: 4px; }
+
+  .event-hcard-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  /* ─── EVENTS LIST (current vertical list – kept for fallback) ─── */
+  .events-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .event-item { background: white; border-radius: 18px; padding: 16px 18px; display: flex; align-items: flex-start; gap: 14px; border: 1px solid var(--cream3); transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; text-decoration: none; color: inherit; animation: fadeUp 0.8s ease both; }
   .event-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.1); }
-
-  .event-date-box { flex-shrink: 0; width: 48px; height: 54px; background: var(--navy); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; margin-top: 2px; }
-  .event-date-box .day { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--cream); line-height: 1; }
-  .event-date-box .month { font-size: 9px; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
-
+  .event-item .event-date-box { width: 48px; height: 54px; border-radius: 12px; }
+  .event-item .event-date-box .day { font-size: 22px; }
+  .event-item .event-date-box .month { font-size: 9px; }
   .event-body { flex: 1; min-width: 0; }
   .event-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 5px; line-height: 1.2; }
   .event-meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 8px; }
   .event-meta span { display: flex; align-items: center; gap: 4px; }
   .event-meta svg { flex-shrink: 0; opacity: 0.7; }
-
-  /* TAGI */
   .event-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  /* ─── TAGS ─── */
   .event-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.4px; white-space: nowrap; }
   .tag-gratis   { background: #E8F5E9; color: #2E7D32; }
   .tag-platne   { background: var(--cream2); color: var(--navy); }
@@ -85,7 +235,176 @@
   .tag-online   { background: #E1F5FE; color: #01579B; }
   .tag-default  { background: var(--cream2); color: var(--navy); }
 
-  /* STATES */
+  /* ─── PAID EVENTS ─── */
+  .paid-hero-banner {
+    background: var(--navy);
+    border-radius: 18px;
+    padding: 20px 22px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    animation: fadeUp 0.9s 0.05s ease both;
+  }
+  .paid-hero-icon { font-size: 28px; line-height: 1; }
+  .paid-hero-text {}
+  .paid-hero-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.5;
+  }
+  .paid-hero-text p strong { font-style: normal; font-weight: 600; color: var(--gold2); }
+
+  /* City filter chips for paid tab */
+  .paid-city-filter {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    margin-bottom: 20px;
+    scrollbar-width: none;
+    animation: fadeUp 0.9s 0.12s ease both;
+  }
+  .paid-city-filter::-webkit-scrollbar { display: none; }
+  .paid-filter-chip {
+    flex-shrink: 0;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--cream3);
+    background: white;
+    color: var(--navy);
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.18s, border-color 0.18s, color 0.18s;
+    white-space: nowrap;
+  }
+  .paid-filter-chip.active {
+    background: var(--navy);
+    border-color: var(--navy);
+    color: var(--gold2);
+  }
+
+  /* Paid event card – vertical list like current */
+  .paid-event-item {
+    background: white;
+    border-radius: 18px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    border: 1px solid var(--cream3);
+    border-left: 4px solid var(--gold);
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    animation: fadeUp 0.8s ease both;
+    position: relative;
+  }
+  .paid-event-item:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.1); }
+  .paid-badge {
+    position: absolute;
+    top: 12px; right: 14px;
+    background: var(--gold);
+    color: var(--navy);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+  .paid-price-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 8px;
+  }
+  .paid-price {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gold);
+  }
+  .paid-type-tag {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: var(--cream2);
+    color: var(--navy2);
+    padding: 3px 9px;
+    border-radius: 10px;
+  }
+
+  /* ─── COMING SOON ─── */
+  .coming-soon-block {
+    text-align: center;
+    padding: 36px 20px;
+    background: white;
+    border-radius: 18px;
+    border: 1px dashed var(--cream3);
+    margin-bottom: 20px;
+  }
+  .coming-soon-icon {
+    font-size: 28px;
+    margin-bottom: 10px;
+    opacity: 0.5;
+  }
+  .coming-soon-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  .coming-soon-desc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 15px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 260px;
+    margin: 0 auto;
+  }
+
+  /* coming soon as a card inside h-scroll */
+  .coming-soon-hcard {
+    flex-shrink: 0;
+    width: 180px;
+    background: white;
+    border-radius: 18px;
+    padding: 20px 16px;
+    border: 1px dashed var(--cream3);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-align: center;
+  }
+  .coming-soon-hcard .cs-icon { font-size: 20px; opacity: 0.4; }
+  .coming-soon-hcard .cs-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    color: var(--navy);
+  }
+  .coming-soon-hcard .cs-sub {
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* ─── STATES ─── */
   .loading-state, .empty-state, .error-state { text-align: center; padding: 32px 20px; background: white; border-radius: 18px; border: 1px solid var(--cream3); margin-bottom: 28px; }
   .loading-state p { color: var(--muted); font-size: 14px; font-style: italic; }
   .loading-dots { display: inline-flex; gap: 6px; margin-bottom: 10px; }
@@ -96,7 +415,7 @@
   .empty-state p, .error-state p { font-size: 13px; color: var(--muted); }
   .error-state p { color: #c0392b; }
 
-  /* MAP */
+  /* ─── MAP ─── */
   .map-wrapper { border-radius: 24px; overflow: hidden; border: 1px solid var(--cream3); margin-bottom: 28px; box-shadow: 0 4px 24px rgba(27,42,74,0.08); animation: fadeUp 0.9s 0.3s ease both; }
   .map-header { background: var(--navy); padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
   .map-header-icon { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; }
@@ -114,7 +433,7 @@
   .popup-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
   .popup-link { display: inline-block; margin-top: 8px; font-size: 11px; font-weight: 600; color: var(--navy); text-decoration: none; }
 
-  /* LINKS */
+  /* ─── LINKS ─── */
   .links-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 40px; }
   .main-link { display: flex; align-items: center; gap: 16px; padding: 18px 22px; border-radius: 18px; text-decoration: none; font-size: 14px; font-weight: 500; letter-spacing: 0.5px; transition: transform 0.2s, box-shadow 0.2s; animation: fadeUp 0.8s 0.5s ease both; }
   .main-link:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,42,74,0.15); }
@@ -125,11 +444,12 @@
   .link-text small { font-size: 11px; opacity: 0.6; font-weight: 400; }
   .link-arrow { font-size: 16px; opacity: 0.4; }
 
-  /* FOOTER */
+  /* ─── FOOTER ─── */
   .footer { text-align: center; animation: fadeUp 0.8s 0.7s ease both; }
   .footer p { font-family: 'Cormorant Garamond', serif; font-size: 13px; font-style: italic; color: var(--muted); margin-bottom: 6px; }
   .footer small { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--cream3); }
 
+  /* ─── ANIMATIONS ─── */
   @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes rotateSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
@@ -139,7 +459,7 @@
 <body>
 <div class="page">
 
-  <!-- HERO -->
+  <!-- ═══ HERO ═══ -->
   <div class="hero">
     <div class="logo-mark">
       <svg class="sun-rays" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -170,43 +490,96 @@
     <p class="hero-desc">Łączymy joginki i joginów.<br>Zajęcia w studiach i w plenerze.</p>
   </div>
 
-  <!-- ABOUT -->
+  <!-- ═══ ABOUT ═══ -->
   <div class="about-card">
     <div class="about-label">✦ O nas</div>
     <p class="about-text"><strong>Jogowanie</strong> to społeczność entuzjastów jogi i wspólnej praktyki. Dzielimy się wydarzeniami jogowymi w Twojej okolicy.</p>
   </div>
 
-  <!-- EVENTS -->
-  <div class="upcoming-count"><div class="dot"></div><span id="event-count-label">Ładowanie wydarzeń...</span></div>
-  <div class="section-title">Nadchodzące wydarzenia</div>
-  <div class="events-list" id="events-container">
-    <div class="loading-state">
-      <div class="loading-dots"><span></span><span></span><span></span></div>
-      <p>Ładuję wydarzenia z kalendarza…</p>
+  <!-- ═══ MAIN TABS ═══ -->
+  <div class="main-tabs-wrap">
+    <div class="main-tabs">
+      <div class="main-tab active" id="tab-free" onclick="switchTab('free')">
+        🌿 Bezpłatne
+        <span class="tab-sub">zajęcia w całej Polsce</span>
+      </div>
+      <div class="main-tab" id="tab-paid" onclick="switchTab('paid')">
+        ✦ Płatne
+        <span class="tab-sub">kursy, retreaty, warsztaty</span>
+      </div>
     </div>
   </div>
 
-  <!-- MAP -->
-  <div class="section-title">Mapa wydarzeń</div>
-  <div class="map-wrapper">
-    <div class="map-header">
-      <div class="map-header-icon">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
-          <line x1="8" y1="2" x2="8" y2="18"/>
-          <line x1="16" y1="6" x2="16" y2="22"/>
-        </svg>
-      </div>
-      <div class="map-header-text">
-        <p>Gdzie jogujemy?</p>
-        <small id="map-pin-count">Ładowanie pinezek...</small>
+  <!-- ═══ TAB: BEZPŁATNE ═══ -->
+  <div class="tab-view visible" id="view-free">
+
+    <div class="upcoming-count">
+      <div class="dot"></div>
+      <span id="event-count-label">Ładowanie wydarzeń...</span>
+    </div>
+
+    <!-- City anchor buttons – filled dynamically -->
+    <div class="city-anchor-bar" id="city-anchor-bar">
+      <!-- generated by JS -->
+    </div>
+
+    <!-- City sections – filled dynamically -->
+    <div id="city-sections-container">
+      <div class="loading-state">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <p>Ładuję wydarzenia z kalendarza…</p>
       </div>
     </div>
-    <div id="map"></div>
-    <div class="map-hint" id="map-hint">Kliknij pinezkę, aby zobaczyć szczegóły</div>
-  </div>
 
-  <!-- LINKS -->
+    <!-- ─── MAP ─── -->
+    <div class="section-title" style="margin-top:8px">Mapa wydarzeń</div>
+    <div class="map-wrapper">
+      <div class="map-header">
+        <div class="map-header-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+            <line x1="8" y1="2" x2="8" y2="18"/>
+            <line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+        </div>
+        <div class="map-header-text">
+          <p>Gdzie jogujemy?</p>
+          <small id="map-pin-count">Ładowanie pinezek...</small>
+        </div>
+      </div>
+      <div id="map"></div>
+      <div class="map-hint" id="map-hint">Kliknij pinezkę, aby zobaczyć szczegóły</div>
+    </div>
+
+  </div><!-- /view-free -->
+
+  <!-- ═══ TAB: PŁATNE ═══ -->
+  <div class="tab-view" id="view-paid">
+
+    <div class="paid-hero-banner">
+      <div class="paid-hero-icon">✦</div>
+      <div class="paid-hero-text">
+        <p><strong>Kursy, retreaty i warsztaty</strong> — joga na głębszym poziomie z doświadczonymi nauczycielami.</p>
+      </div>
+    </div>
+
+    <!-- City filter chips for paid -->
+    <div class="paid-city-filter" id="paid-city-filter">
+      <div class="paid-filter-chip active" data-city="wszystkie" onclick="filterPaid(this)">Wszystkie</div>
+      <!-- further chips added by JS -->
+    </div>
+
+    <!-- Paid events list – filled dynamically -->
+    <div id="paid-events-container">
+      <div class="loading-state">
+        <div class="loading-dots"><span></span><span></span><span></span></div>
+        <p>Ładuję płatne wydarzenia…</p>
+      </div>
+    </div>
+
+  </div><!-- /view-paid -->
+
+  <!-- ═══ LINKS ═══ -->
   <div class="section-title">Dołącz do nas</div>
   <div class="links-list">
     <a class="main-link link-primary" href="https://docs.google.com/forms/d/1Dg7WmS4kxFiPJ0FRZG-vnw8buq5GTb8NpcPHWVN0nUc/viewform" id="link-formularz" target="_blank">
@@ -227,187 +600,412 @@
     </a>
   </div>
 
-  <!-- FOOTER -->
+  <!-- ═══ FOOTER ═══ -->
   <div class="footer">
     <div class="divider" style="margin:0 auto 16px;"><div class="divider-line"></div><div class="divider-dot"></div><div class="divider-line"></div></div>
     <p>Do zobaczenia!</p>
     <small>© 2026 Jogowanie</small>
   </div>
 
-</div>
+</div><!-- /page -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <script>
-  const CONFIG = {
-    sheetsCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqguyRo9UM1S4qJS9xD_sYl9IizlH3p91hpO6hbu34gmw5BP9vRxbDbSYkBG_xF5apBoNBEVHT5dTe/pub?output=csv",
-    formularz: "https://docs.google.com/forms/d/1Dg7WmS4kxFiPJ0FRZG-vnw8buq5GTb8NpcPHWVN0nUc/viewform",
-  };
+/* ═══════════════════════════════════════════════
+   CONFIG
+═══════════════════════════════════════════════ */
+const CONFIG = {
+  /*
+   * Google Sheets CSV – teraz musi zawierać kolumny:
+   *   nazwa, dzien, miesiac, godzina, miasto, dzielnica, lokalizacja,
+   *   lat, lng, link, tagi, cena, typ_platnego
+   *
+   * Kolumna "cena":
+   *   - pusta lub "0" lub "gratis"  → bezpłatne  (pojawi się w zakładce Bezpłatne)
+   *   - dowolna kwota np. "150 zł"  → płatne      (pojawi się w zakładce Płatne)
+   *
+   * Kolumna "typ_platnego" (opcjonalnie, tylko dla płatnych):
+   *   - retreat / kurs / warsztaty / inne
+   *
+   * Kolumna "miasto":
+   *   - wartość tekstowa, np. "Warszawa", "Kraków" — używana do grupowania i filtrów
+  */
+  sheetsCSV: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQqguyRo9UM1S4qJS9xD_sYl9IizlH3p91hpO6hbu34gmw5BP9vRxbDbSYkBG_xF5apBoNBEVHT5dTe/pub?output=csv",
+  formularz: "https://docs.google.com/forms/d/1Dg7WmS4kxFiPJ0FRZG-vnw8buq5GTb8NpcPHWVN0nUc/viewform",
+};
 
-  document.getElementById('link-formularz').href = CONFIG.formularz;
+document.getElementById('link-formularz').href = CONFIG.formularz;
 
-  // Mapa
-  const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([52.0, 19.5], 5);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-    attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
-  }).addTo(map);
+/* ═══════════════════════════════════════════════
+   MAP
+═══════════════════════════════════════════════ */
+const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView([52.0, 19.5], 5);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
+}).addTo(map);
 
-  // Słońce w pinezce
-  const sunPinIcon = L.divIcon({
-    className: '',
-    html: `<svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 48 C20 48 4 34 4 20 C4 11.2 11.2 4 20 4 C28.8 4 36 11.2 36 20 C36 34 20 48 20 48Z"
-        fill="#1B2A4A" stroke="#C9A84C" stroke-width="1.5"/>
-      <g transform="translate(20,20)" stroke="#C9A84C" stroke-width="1.3" stroke-linecap="round">
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(0)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(30)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(60)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(90)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(120)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(150)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(180)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(210)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(240)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(270)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(300)"/>
-        <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(330)"/>
-      </g>
-      <circle cx="20" cy="20" r="5" fill="#C9A84C"/>
-    </svg>`,
-    iconSize: [40, 50], iconAnchor: [20, 48], popupAnchor: [0, -50]
-  });
+const sunPinIcon = L.divIcon({
+  className: '',
+  html: `<svg width="40" height="50" viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M20 48 C20 48 4 34 4 20 C4 11.2 11.2 4 20 4 C28.8 4 36 11.2 36 20 C36 34 20 48 20 48Z"
+      fill="#1B2A4A" stroke="#C9A84C" stroke-width="1.5"/>
+    <g transform="translate(20,20)" stroke="#C9A84C" stroke-width="1.3" stroke-linecap="round">
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(0)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(30)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(60)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(90)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(120)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(150)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(180)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(210)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(240)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(270)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(300)"/>
+      <line x1="0" y1="-14" x2="0" y2="-11" transform="rotate(330)"/>
+    </g>
+    <circle cx="20" cy="20" r="5" fill="#C9A84C"/>
+  </svg>`,
+  iconSize: [40, 50], iconAnchor: [20, 48], popupAnchor: [0, -50]
+});
 
-  // SVG ikonki
-  const iconPin      = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
-  const iconClock    = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
-  const iconCal      = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
-  const iconDistrict = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
+/* ═══════════════════════════════════════════════
+   ICONS
+═══════════════════════════════════════════════ */
+const iconPin      = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`;
+const iconClock    = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`;
+const iconCal      = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`;
+const iconDistrict = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`;
 
-  // Mapowanie tagów
-  const TAG_STYLES = {
-    'gratis':   'tag-gratis',
-    'płatne':   'tag-platne',
-    'nowe':     'tag-nowe',
-    'cykl':     'tag-cykl',
-    'polecane': 'tag-polecane',
-    'outdoor':  'tag-outdoor',
-    'plener':   'tag-outdoor',
-    'weekend':  'tag-weekend',
-    'retreat':  'tag-retreat',
-    'online':   'tag-online',
-  };
+/* ═══════════════════════════════════════════════
+   TAGS
+═══════════════════════════════════════════════ */
+const TAG_STYLES = {
+  'gratis':   'tag-gratis',
+  'płatne':   'tag-platne',
+  'nowe':     'tag-nowe',
+  'cykl':     'tag-cykl',
+  'polecane': 'tag-polecane',
+  'outdoor':  'tag-outdoor',
+  'plener':   'tag-outdoor',
+  'weekend':  'tag-weekend',
+  'retreat':  'tag-retreat',
+  'online':   'tag-online',
+};
 
-  function renderTags(tagsStr) {
-    if (!tagsStr || tagsStr.trim() === '') return '';
-    return tagsStr.split(';')
-      .map(t => t.trim().toLowerCase()).filter(Boolean)
-      .map(tag => `<span class="event-tag ${TAG_STYLES[tag] || 'tag-default'}">${tag}</span>`)
-      .join('');
-  }
+function renderTags(tagsStr) {
+  if (!tagsStr || tagsStr.trim() === '') return '';
+  return tagsStr.split(';')
+    .map(t => t.trim().toLowerCase()).filter(Boolean)
+    .map(tag => `<span class="event-tag ${TAG_STYLES[tag] || 'tag-default'}">${tag}</span>`)
+    .join('');
+}
 
-  // CSV parser
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    if (lines.length < 2) return [];
-    const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
-    return lines.slice(1).map(line => {
-      const cols = []; let cur = '', inQ = false;
-      for (let ch of line) {
-        if (ch === '"') inQ = !inQ;
-        else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
-        else cur += ch;
-      }
-      cols.push(cur.trim());
-      const obj = {};
-      headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/"/g, '').trim());
-      return obj;
-    }).filter(row => row.nazwa && row.nazwa.length > 0);
-  }
+/* ═══════════════════════════════════════════════
+   CSV PARSER
+═══════════════════════════════════════════════ */
+function parseCSV(text) {
+  const lines = text.trim().split('\n');
+  if (lines.length < 2) return [];
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
+  return lines.slice(1).map(line => {
+    const cols = []; let cur = '', inQ = false;
+    for (let ch of line) {
+      if (ch === '"') inQ = !inQ;
+      else if (ch === ',' && !inQ) { cols.push(cur.trim()); cur = ''; }
+      else cur += ch;
+    }
+    cols.push(cur.trim());
+    const obj = {};
+    headers.forEach((h, i) => obj[h] = (cols[i] || '').replace(/"/g, '').trim());
+    return obj;
+  }).filter(row => row.nazwa && row.nazwa.length > 0);
+}
 
-  function createEventCard(ev, i) {
-    const tagsHTML = renderTags(ev.tagi);
-    return `
-      <a class="event-item" href="${ev.link || '#'}" style="animation-delay:${0.25 + i * 0.07}s"
-         ${ev.link && ev.link !== '#' ? 'target="_blank"' : ''}>
+/* ═══════════════════════════════════════════════
+   HELPERS: is paid?
+═══════════════════════════════════════════════ */
+function isPaid(ev) {
+  const cena = (ev.cena || '').trim().toLowerCase();
+  return cena !== '' && cena !== '0' && cena !== 'gratis' && cena !== 'bezpłatne' && cena !== 'bezplatne';
+}
+
+/* ═══════════════════════════════════════════════
+   RENDER: horizontal event card (free tab)
+═══════════════════════════════════════════════ */
+function createHCard(ev) {
+  const tagsHTML = renderTags(ev.tagi);
+  const href = ev.link && ev.link !== '#' ? ev.link : '#';
+  const target = ev.link && ev.link !== '#' ? 'target="_blank"' : '';
+  return `
+    <a class="event-hcard" href="${href}" ${target}>
+      <div class="event-hcard-top">
         <div class="event-date-box">
           <div class="day">${ev.dzien || '?'}</div>
           <div class="month">${ev.miesiac || '?'}</div>
         </div>
-        <div class="event-body">
-          <div class="event-name">${ev.nazwa}</div>
-          <div class="event-meta">
-            ${ev.miasto     ? `<span>${iconPin} ${ev.miasto}</span>`       : ''}
-            ${ev.dzielnica  ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : ''}
-            ${ev.godzina    ? `<span>${iconClock} ${ev.godzina}</span>`    : ''}
+        <div class="event-hcard-info">
+          <div class="event-hcard-name">${ev.nazwa}</div>
+          <div class="event-hcard-meta">
+            ${ev.dzielnica ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : (ev.miasto ? `<span>${iconPin} ${ev.miasto}</span>` : '')}
+            ${ev.godzina   ? `<span>${iconClock} ${ev.godzina}</span>` : ''}
           </div>
-          ${tagsHTML ? `<div class="event-tags">${tagsHTML}</div>` : ''}
         </div>
-      </a>`;
-  }
-
-  function createPopup(ev) {
-    const tagsHTML = renderTags(ev.tagi);
-    return `
-      <div class="popup-title">${ev.nazwa}</div>
-      <div class="popup-meta">
-        <div class="popup-meta-row">${iconCal} ${ev.dzien || ''} ${ev.miesiac || ''}</div>
-        ${ev.godzina   ? `<div class="popup-meta-row">${iconClock} ${ev.godzina}</div>`       : ''}
-        ${ev.lokalizacja || ev.miasto ? `<div class="popup-meta-row">${iconPin} ${ev.lokalizacja || ev.miasto}</div>` : ''}
-        ${ev.dzielnica ? `<div class="popup-meta-row">${iconDistrict} ${ev.dzielnica}</div>` : ''}
       </div>
-      ${tagsHTML ? `<div class="popup-tags">${tagsHTML}</div>` : ''}
-      ${ev.link && ev.link !== '#'
-        ? `<a class="popup-link" href="${ev.link}" target="_blank">Więcej info →</a>`
-        : ''}`;
-  }
+      ${tagsHTML ? `<div class="event-hcard-tags">${tagsHTML}</div>` : ''}
+    </a>`;
+}
 
-  async function loadAll() {
-    const container  = document.getElementById('events-container');
-    const countLabel = document.getElementById('event-count-label');
-    const pinCount   = document.getElementById('map-pin-count');
-    const mapHint    = document.getElementById('map-hint');
+/* ═══════════════════════════════════════════════
+   RENDER: paid event card
+═══════════════════════════════════════════════ */
+function createPaidCard(ev, i) {
+  const tagsHTML = renderTags(ev.tagi);
+  const href = ev.link && ev.link !== '#' ? ev.link : '#';
+  const target = ev.link && ev.link !== '#' ? 'target="_blank"' : '';
+  const typLabel = ev.typ_platnego ? ev.typ_platnego.trim() : '';
+  return `
+    <a class="paid-event-item" href="${href}" ${target}
+       style="animation-delay:${0.1 + i * 0.07}s"
+       data-city="${(ev.miasto || '').toLowerCase()}">
+      <div class="paid-badge">Płatne</div>
+      <div class="event-date-box" style="width:44px;height:50px;border-radius:11px;">
+        <div class="day" style="font-size:20px">${ev.dzien || '?'}</div>
+        <div class="month" style="font-size:8px">${ev.miesiac || '?'}</div>
+      </div>
+      <div class="event-body" style="padding-right:52px">
+        <div class="event-name">${ev.nazwa}</div>
+        <div class="event-meta">
+          ${ev.miasto    ? `<span>${iconPin} ${ev.miasto}</span>`        : ''}
+          ${ev.dzielnica ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : ''}
+          ${ev.godzina   ? `<span>${iconClock} ${ev.godzina}</span>`     : ''}
+        </div>
+        ${tagsHTML ? `<div class="event-tags">${tagsHTML}</div>` : ''}
+        <div class="paid-price-row">
+          <span class="paid-price">${ev.cena}</span>
+          ${typLabel ? `<span class="paid-type-tag">${typLabel}</span>` : ''}
+        </div>
+      </div>
+    </a>`;
+}
 
-    try {
-      const res = await fetch(CONFIG.sheetsCSV);
-      if (!res.ok) throw new Error('Błąd pobierania');
-      const events = parseCSV(await res.text());
+/* ═══════════════════════════════════════════════
+   RENDER: popup
+═══════════════════════════════════════════════ */
+function createPopup(ev) {
+  const tagsHTML = renderTags(ev.tagi);
+  return `
+    <div class="popup-title">${ev.nazwa}</div>
+    <div class="popup-meta">
+      <div class="popup-meta-row">${iconCal} ${ev.dzien || ''} ${ev.miesiac || ''}</div>
+      ${ev.godzina    ? `<div class="popup-meta-row">${iconClock} ${ev.godzina}</div>` : ''}
+      ${ev.lokalizacja || ev.miasto ? `<div class="popup-meta-row">${iconPin} ${ev.lokalizacja || ev.miasto}</div>` : ''}
+      ${ev.dzielnica  ? `<div class="popup-meta-row">${iconDistrict} ${ev.dzielnica}</div>` : ''}
+      ${isPaid(ev)    ? `<div class="popup-meta-row" style="color:var(--gold);font-weight:600">💰 ${ev.cena}</div>` : ''}
+    </div>
+    ${tagsHTML ? `<div class="popup-tags">${tagsHTML}</div>` : ''}
+    ${ev.link && ev.link !== '#' ? `<a class="popup-link" href="${ev.link}" target="_blank">Więcej info →</a>` : ''}`;
+}
 
-      if (events.length === 0) {
-        container.innerHTML = `<div class="empty-state"><div class="emoji">🌿</div><p>Brak wydarzeń.<br>Dodaj pierwsze wydarzenie do Google Sheets!</p></div>`;
-        countLabel.textContent = 'Brak wydarzeń';
-        pinCount.textContent = 'Brak pinezek';
-        return;
-      }
+/* ═══════════════════════════════════════════════
+   TAB SWITCH
+═══════════════════════════════════════════════ */
+function switchTab(tab) {
+  document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('visible'));
+  document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + tab).classList.add('visible');
+  document.getElementById('tab-' + tab).classList.add('active');
+}
 
-      container.innerHTML = events.map((e, i) => createEventCard(e, i)).join('');
-      countLabel.textContent = `${events.length} wydarzeń w kalendarzu`;
+/* ═══════════════════════════════════════════════
+   PAID FILTER
+═══════════════════════════════════════════════ */
+function filterPaid(chip) {
+  document.querySelectorAll('#paid-city-filter .paid-filter-chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  const city = chip.dataset.city;
+  document.querySelectorAll('#paid-events-container .paid-event-item').forEach(card => {
+    if (city === 'wszystkie' || card.dataset.city === city) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
 
-      let pins = 0;
-      const bounds = [];
-      events.forEach(ev => {
-        const lat = parseFloat(ev.lat), lng = parseFloat(ev.lng);
-        if (!isNaN(lat) && !isNaN(lng)) {
-          L.marker([lat, lng], { icon: sunPinIcon }).addTo(map)
-           .bindPopup(createPopup(ev), { maxWidth: 240 });
-          bounds.push([lat, lng]);
-          pins++;
-        }
+/* ═══════════════════════════════════════════════
+   MAIN LOAD
+═══════════════════════════════════════════════ */
+async function loadAll() {
+  const countLabel      = document.getElementById('event-count-label');
+  const pinCount        = document.getElementById('map-pin-count');
+  const mapHint         = document.getElementById('map-hint');
+  const citySectionsEl  = document.getElementById('city-sections-container');
+  const cityAnchorBar   = document.getElementById('city-anchor-bar');
+  const paidContainer   = document.getElementById('paid-events-container');
+  const paidCityFilter  = document.getElementById('paid-city-filter');
+
+  try {
+    const res = await fetch(CONFIG.sheetsCSV);
+    if (!res.ok) throw new Error('Błąd pobierania');
+    const allEvents = parseCSV(await res.text());
+
+    if (allEvents.length === 0) {
+      citySectionsEl.innerHTML = `
+        <div class="coming-soon-block">
+          <div class="coming-soon-icon">🌿</div>
+          <div class="coming-soon-title">Coming soon</div>
+          <p class="coming-soon-desc">Już wkrótce wydarzenia jogowe w Twoim mieście.</p>
+        </div>`;
+      paidContainer.innerHTML  = `
+        <div class="coming-soon-block">
+          <div class="coming-soon-icon">✦</div>
+          <div class="coming-soon-title">Coming soon</div>
+          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty z doświadczonymi nauczycielkami jogi.</p>
+        </div>`;
+      countLabel.textContent   = 'Już wkrótce';
+      pinCount.textContent     = 'Mapa zostanie uzupełniona wkrótce';
+      return;
+    }
+
+    /* ── Split free / paid ── */
+    const freeEvents = allEvents.filter(e => !isPaid(e));
+    const paidEvents = allEvents.filter(e => isPaid(e));
+
+    /* ── Free tab: group by city ── */
+    const cityMap = {};
+    const cityOrder = []; // preserve order of first appearance
+    freeEvents.forEach(ev => {
+      const city = (ev.miasto || 'Inne').trim();
+      if (!cityMap[city]) { cityMap[city] = []; cityOrder.push(city); }
+      cityMap[city].push(ev);
+    });
+
+    /* city anchor buttons – active cities + coming soon */
+    const allAnchorCities = [...cityOrder, ...extraCities];
+    cityAnchorBar.innerHTML = allAnchorCities.map(city =>
+      `<button class="city-anchor-btn${extraCities.includes(city) ? ' cs-anchor' : ''}"
+        onclick="scrollToCity('city-${slugify(city)}')"
+        style="${extraCities.includes(city) ? 'opacity:0.5' : ''}">${city}</button>`
+    ).join('');
+
+    /* city sections with horizontal scroll */
+    const csCard = `
+      <div class="coming-soon-hcard">
+        <div class="cs-icon">🌿</div>
+        <div class="cs-label">Coming soon</div>
+        <div class="cs-sub">Więcej wydarzeń<br>już wkrótce</div>
+      </div>`;
+
+    const COMING_SOON_CITIES = ['Kraków', 'Wrocław', 'Trójmiasto', 'Poznań'];
+    const existingCities = new Set(cityOrder);
+    const extraCities = COMING_SOON_CITIES.filter(c => !existingCities.has(c));
+
+    citySectionsEl.innerHTML = cityOrder.map(city => {
+      const evs = cityMap[city];
+      const slug = slugify(city);
+      const cards = evs.map(ev => createHCard(ev)).join('');
+      return `
+        <div class="city-section" id="city-${slug}">
+          <div class="city-section-header">
+            <div class="city-section-name">${city}</div>
+            <div class="city-section-count">${evs.length} ${evs.length === 1 ? 'wydarzenie' : evs.length < 5 ? 'wydarzenia' : 'wydarzeń'}</div>
+          </div>
+          <div class="city-section-line"></div>
+          <div class="h-scroll">${cards}${csCard}</div>
+        </div>`;
+    }).join('') + extraCities.map(city => {
+      const slug = slugify(city);
+      return `
+        <div class="city-section" id="city-${slug}">
+          <div class="city-section-header">
+            <div class="city-section-name" style="opacity:0.45">${city}</div>
+            <div class="city-section-count" style="opacity:0.45">coming soon</div>
+          </div>
+          <div class="city-section-line" style="opacity:0.3"></div>
+          <div class="h-scroll">
+            <div class="coming-soon-hcard" style="width:100%;max-width:none;flex-shrink:1">
+              <div class="cs-icon">🌿</div>
+              <div class="cs-label">Coming soon</div>
+              <div class="cs-sub">Już wkrótce wydarzenia jogowe w ${city}</div>
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+
+    countLabel.textContent = `${freeEvents.length} bezpłatnych wydarzeń`;
+
+    /* ── Paid tab ── */
+    if (paidEvents.length === 0) {
+      paidContainer.innerHTML = `
+        <div class="coming-soon-block">
+          <div class="coming-soon-icon">✦</div>
+          <div class="coming-soon-title">Coming soon</div>
+          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty z doświadczonymi nauczycielkami jogi.</p>
+        </div>`;
+    } else {
+      /* city chips */
+      const paidCities = [...new Set(paidEvents.map(e => (e.miasto || '').trim()).filter(Boolean))];
+      paidCities.forEach(city => {
+        const chip = document.createElement('div');
+        chip.className = 'paid-filter-chip';
+        chip.dataset.city = city.toLowerCase();
+        chip.textContent = city;
+        chip.setAttribute('onclick', 'filterPaid(this)');
+        paidCityFilter.appendChild(chip);
       });
 
-      if (pins > 0) {
-        map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
-        pinCount.textContent = `${pins} wydarzeń na mapie`;
-      } else {
-        pinCount.textContent = 'Dodaj kolumny lat i lng do arkusza';
-        mapHint.innerHTML = 'Aby pinezki się pojawiły, dodaj kolumny <b>lat</b> i <b>lng</b> do swojego Google Sheets';
-      }
-
-    } catch (err) {
-      container.innerHTML = `<div class="error-state"><p>⚠️ Nie udało się załadować wydarzeń.<br>Sprawdź czy arkusz Google Sheets jest opublikowany.</p></div>`;
-      countLabel.textContent = 'Błąd ładowania';
+      /* paid cards */
+      paidContainer.innerHTML = `<div class="events-list">${paidEvents.map((e, i) => createPaidCard(e, i)).join('')}</div>`;
     }
-  }
 
-  loadAll();
+    /* ── Map: all events ── */
+    let pins = 0;
+    const bounds = [];
+    allEvents.forEach(ev => {
+      const lat = parseFloat(ev.lat), lng = parseFloat(ev.lng);
+      if (!isNaN(lat) && !isNaN(lng)) {
+        L.marker([lat, lng], { icon: sunPinIcon }).addTo(map)
+          .bindPopup(createPopup(ev), { maxWidth: 240 });
+        bounds.push([lat, lng]);
+        pins++;
+      }
+    });
+
+    if (pins > 0) {
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+      pinCount.textContent = `${pins} wydarzeń na mapie`;
+    } else {
+      pinCount.textContent = 'Dodaj kolumny lat i lng do arkusza';
+      mapHint.innerHTML = 'Aby pinezki się pojawiły, dodaj kolumny <b>lat</b> i <b>lng</b> do swojego Google Sheets';
+    }
+
+  } catch (err) {
+    citySectionsEl.innerHTML = `<div class="error-state"><p>⚠️ Nie udało się załadować wydarzeń.<br>Sprawdź czy arkusz Google Sheets jest opublikowany.</p></div>`;
+    paidContainer.innerHTML  = `<div class="error-state"><p>⚠️ Nie udało się załadować płatnych wydarzeń.</p></div>`;
+    countLabel.textContent   = 'Błąd ładowania';
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════════ */
+function slugify(str) {
+  return str.toLowerCase()
+    .replace(/ą/g,'a').replace(/ć/g,'c').replace(/ę/g,'e').replace(/ł/g,'l')
+    .replace(/ń/g,'n').replace(/ó/g,'o').replace(/ś/g,'s').replace(/ź/g,'z').replace(/ż/g,'z')
+    .replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
+function scrollToCity(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  /* update active anchor btn */
+  document.querySelectorAll('.city-anchor-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes(id));
+  });
+}
+
+loadAll();
 </script>
 </body>
 </html>
