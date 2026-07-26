@@ -165,6 +165,28 @@
     border-radius: 1px;
   }
 
+  /* ─── RECURRING VERTICAL LIST ─── */
+  .recurring-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
+  .recurring-item {
+    background: #FDFAFF;
+    border-radius: 18px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid #D8C4F0;
+    border-left: 3px solid #6A1B9A;
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .recurring-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(106,27,154,0.08); }
+  .recurring-item .recur-date-box { flex-shrink: 0; }
+  .recurring-item-body { flex: 1; min-width: 0; }
+  .recurring-item-name { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.25; margin-bottom: 5px; }
+  .recurring-item-meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 7px; }
+  .recurring-item-meta span { display: flex; align-items: center; gap: 4px; }
+
   /* ─── SUBSECTION LABELS (jednorazowe / cykliczne) ─── */
   .subsection-label {
     display: flex;
@@ -828,29 +850,27 @@ function createHCard(ev) {
 }
 
 /* ═══════════════════════════════════════════════
-   RENDER: recurring event card (horizontal)
+   RENDER: recurring event — vertical list item
 ═══════════════════════════════════════════════ */
-function createRecurringCard(ev) {
+function createRecurringItem(ev) {
   const href = ev.link && ev.link !== '#' ? ev.link : '#';
   const target = ev.link && ev.link !== '#' ? 'target="_blank"' : '';
   const dzienTyg = (ev.dzien_tygodnia || '').trim();
   const sezon    = (ev.sezon || '').trim();
   return `
-    <a class="event-hcard recurring" href="${href}" ${target}>
-      <div class="event-hcard-top">
-        <div class="recur-date-box">
-          <div class="recur-icon">🔁</div>
-          <div class="recur-label">${dzienTyg || 'cykl'}</div>
-        </div>
-        <div class="event-hcard-info">
-          <div class="event-hcard-name">${ev.nazwa}</div>
-          <div class="event-hcard-meta">
-            ${ev.dzielnica ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : (ev.miasto ? `<span>${iconPin} ${ev.miasto}</span>` : '')}
-            ${ev.godzina   ? `<span>${iconClock} ${ev.godzina}</span>` : ''}
-          </div>
-        </div>
+    <a class="recurring-item" href="${href}" ${target}>
+      <div class="recur-date-box">
+        <div class="recur-icon">🔁</div>
+        <div class="recur-label">${dzienTyg || 'cykl'}</div>
       </div>
-      ${sezon ? `<div class="event-hcard-tags"><span class="season-badge">📅 ${sezon}</span></div>` : ''}
+      <div class="recurring-item-body">
+        <div class="recurring-item-name">${ev.nazwa}</div>
+        <div class="recurring-item-meta">
+          ${ev.dzielnica ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : (ev.miasto ? `<span>${iconPin} ${ev.miasto}</span>` : '')}
+          ${ev.godzina   ? `<span>${iconClock} ${ev.godzina}</span>` : ''}
+        </div>
+        ${sezon ? `<span class="season-badge">📅 ${sezon}</span>` : ''}
+      </div>
     </a>`;
 }
 
@@ -1022,7 +1042,7 @@ async function loadAll() {
 
       const recurringHTML = recurring.length > 0
         ? `<div class="subsection-pill">🔁 Cykliczne</div>
-           <div class="h-scroll">${recurring.map(ev => createRecurringCard(ev)).join('')}</div>`
+           <div class="recurring-list">${recurring.map(ev => createRecurringItem(ev)).join('')}</div>`
         : '';
 
       const total = evs.length;
