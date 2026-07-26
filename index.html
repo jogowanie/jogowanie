@@ -165,29 +165,7 @@
     border-radius: 1px;
   }
 
-  /* ─── RECURRING VERTICAL LIST ─── */
-  .recurring-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
-  .recurring-item {
-    background: #FDFAFF;
-    border-radius: 18px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    border: 1px solid #D8C4F0;
-    border-left: 3px solid #6A1B9A;
-    text-decoration: none;
-    color: inherit;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .recurring-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(106,27,154,0.08); }
-  .recurring-item .recur-date-box { flex-shrink: 0; }
-  .recurring-item-body { flex: 1; min-width: 0; }
-  .recurring-item-name { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--navy); line-height: 1.25; margin-bottom: 5px; }
-  .recurring-item-meta { font-size: 11px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 7px; }
-  .recurring-item-meta span { display: flex; align-items: center; gap: 4px; }
-
-  /* ─── SUBSECTION LABELS (jednorazowe / cykliczne) ─── */
+  /* ─── SUBSECTION LABELS (jednorazowe / cykliczne / dzień tygodnia) ─── */
   .subsection-label {
     display: flex;
     align-items: center;
@@ -210,40 +188,59 @@
   .subsection-pill {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    background: #F3E5F5;
-    color: #6A1B9A;
+    gap: 6px;
+    background: var(--navy);
+    color: var(--gold2);
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 4px 11px;
+    padding: 4px 12px;
     border-radius: 20px;
     margin: 10px 0 10px;
   }
-
-  /* ─── RECURRING CARD STYLE ─── */
-  .event-hcard.recurring {
-    border-color: #D8C4F0;
-    border-left: 3px solid #6A1B9A;
-    background: #FDFAFF;
+  /* day-of-week sub-label inside recurring section */
+  .day-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 8px 0 8px 2px;
   }
+  .day-label-text {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--navy2);
+    white-space: nowrap;
+  }
+  .day-label-line {
+    flex: 1;
+    height: 1px;
+    background: var(--cream3);
+  }
+
+  /* ─── RECURRING CARD – same style as one-time, navy/gold ─── */
   .recur-date-box {
     flex-shrink: 0;
     width: 44px; height: 50px;
-    background: #F3E5F5;
+    background: var(--navy);
     border-radius: 11px;
     display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 2px;
+    align-items: center; justify-content: center; gap: 3px;
   }
-  .recur-date-box .recur-icon { font-size: 15px; line-height: 1; }
-  .recur-date-box .recur-label { font-size: 7px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: #6A1B9A; text-align: center; line-height: 1.2; }
+  /* SVG arrows icon inside recur-date-box */
+  .recur-date-box svg { display: block; }
+  .recur-date-box .recur-label {
+    font-size: 7px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--gold); text-align: center; line-height: 1.2;
+  }
   .season-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    background: #F3E5F5;
-    color: #6A1B9A;
+    background: var(--cream2);
+    color: var(--navy2);
     font-size: 9px;
     font-weight: 600;
     letter-spacing: 0.5px;
@@ -645,7 +642,7 @@
     <div class="paid-hero-banner">
       <div class="paid-hero-icon">✦</div>
       <div class="paid-hero-text">
-        <p><strong></strong> </p>
+        <p><strong>Kursy, retreaty i warsztaty</strong> — joga na głębszym poziomie z doświadczonymi nauczycielami.</p>
       </div>
     </div>
 
@@ -850,26 +847,39 @@ function createHCard(ev) {
 }
 
 /* ═══════════════════════════════════════════════
-   RENDER: recurring event — vertical list item
+   RENDER: recurring event card (carousel, navy/gold)
 ═══════════════════════════════════════════════ */
-function createRecurringItem(ev) {
-  const href = ev.link && ev.link !== '#' ? ev.link : '#';
+function createRecurringCard(ev) {
+  const tagsHTML = renderTags(ev.tagi);
+  const href   = ev.link && ev.link !== '#' ? ev.link : '#';
   const target = ev.link && ev.link !== '#' ? 'target="_blank"' : '';
-  const dzienTyg = (ev.dzien_tygodnia || '').trim();
+  const dzienTyg = (ev.dzien_tygodnia || ev.dzien || '').trim();
   const sezon    = (ev.sezon || '').trim();
+  // SVG circular arrows in gold, matching brand palette
+  const recurSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+      stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="1 4 1 10 7 10"/>
+    <polyline points="23 20 23 14 17 14"/>
+    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+  </svg>`;
   return `
-    <a class="recurring-item" href="${href}" ${target}>
-      <div class="recur-date-box">
-        <div class="recur-icon">🔁</div>
-        <div class="recur-label">${dzienTyg || 'cykl'}</div>
-      </div>
-      <div class="recurring-item-body">
-        <div class="recurring-item-name">${ev.nazwa}</div>
-        <div class="recurring-item-meta">
-          ${ev.dzielnica ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : (ev.miasto ? `<span>${iconPin} ${ev.miasto}</span>` : '')}
-          ${ev.godzina   ? `<span>${iconClock} ${ev.godzina}</span>` : ''}
+    <a class="event-hcard" href="${href}" ${target}>
+      <div class="event-hcard-top">
+        <div class="recur-date-box">
+          ${recurSVG}
+          <div class="recur-label">${dzienTyg || 'cykl'}</div>
         </div>
+        <div class="event-hcard-info">
+          <div class="event-hcard-name">${ev.nazwa}</div>
+          <div class="event-hcard-meta">
+            ${ev.dzielnica ? `<span>${iconDistrict} ${ev.dzielnica}</span>` : (ev.miasto ? `<span>${iconPin} ${ev.miasto}</span>` : '')}
+            ${ev.godzina   ? `<span>${iconClock} ${ev.godzina}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="event-hcard-tags">
         ${sezon ? `<span class="season-badge">📅 ${sezon}</span>` : ''}
+        ${tagsHTML}
       </div>
     </a>`;
 }
@@ -984,7 +994,7 @@ async function loadAll() {
         <div class="coming-soon-block">
           <div class="coming-soon-icon">✦</div>
           <div class="coming-soon-title">Coming soon</div>
-          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty z doświadczonymi nauczycielkami jogi.</p>
+          <p class="coming-soon-desc">.</p>
         </div>`;
       countLabel.textContent   = 'Już wkrótce';
       pinCount.textContent     = 'Mapa zostanie uzupełniona wkrótce';
@@ -1025,13 +1035,20 @@ async function loadAll() {
         style="${extraCities.includes(city) ? 'opacity:0.5' : ''}">${city}</button>`
     ).join('');
 
+    // Kolejność dni tygodnia do sortowania
+    const DAY_ORDER = ['poniedziałek','wtorek','środa','czwartek','piątek','sobota','niedziela'];
+    // Miasto z karuzelami per dzień dla cyklicznych
+    const CITY_DAY_CAROUSELS = 'warszawa';
+
     citySectionsEl.innerHTML = cityOrder.map(city => {
-      const evs = cityMap[city];
+      const evs  = cityMap[city];
       const slug = slugify(city);
+      const isMainCity = slugify(city) === CITY_DAY_CAROUSELS;
 
       const oneTime   = evs.filter(e => !isRecurring(e));
       const recurring = evs.filter(e => isRecurring(e));
 
+      // Sekcja jednorazowych — zawsze karuzela
       const oneTimeHTML = oneTime.length > 0
         ? `<div class="subsection-label">
              <span class="subsection-label-text">Jednorazowe</span>
@@ -1040,10 +1057,47 @@ async function loadAll() {
            <div class="h-scroll">${oneTime.map(ev => createHCard(ev)).join('')}${csCard}</div>`
         : '';
 
-      const recurringHTML = recurring.length > 0
-        ? `<div class="subsection-pill">🔁 Cykliczne</div>
-           <div class="recurring-list">${recurring.map(ev => createRecurringItem(ev)).join('')}</div>`
-        : '';
+      // Sekcja cyklicznych
+      let recurringHTML = '';
+      if (recurring.length > 0) {
+        if (isMainCity) {
+          // Warszawa: karuzele per dzień tygodnia
+          const byDay = {};
+          const dayOrder = [];
+          recurring.forEach(ev => {
+            const d = (ev.dzien_tygodnia || ev.dzien || 'inne').trim().toLowerCase();
+            if (!byDay[d]) { byDay[d] = []; dayOrder.push(d); }
+            byDay[d].push(ev);
+          });
+          // sortuj wg DAY_ORDER
+          dayOrder.sort((a, b) => {
+            const ia = DAY_ORDER.indexOf(a), ib = DAY_ORDER.indexOf(b);
+            return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+          });
+          const dayCarousels = dayOrder.map(day => {
+            const dayEvs = byDay[day];
+            const dayLabel = day.charAt(0).toUpperCase() + day.slice(1);
+            return `
+              <div class="day-label">
+                <span class="day-label-text">${dayLabel}</span>
+                <div class="day-label-line"></div>
+              </div>
+              <div class="h-scroll">${dayEvs.map(ev => createRecurringCard(ev)).join('')}</div>`;
+          }).join('');
+          recurringHTML = `<div class="subsection-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+              Cykliczne
+            </div>
+            ${dayCarousels}`;
+        } else {
+          // Inne miasta: jedna karuzela dla wszystkich cyklicznych
+          recurringHTML = `<div class="subsection-pill">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+              Cykliczne
+            </div>
+            <div class="h-scroll">${recurring.map(ev => createRecurringCard(ev)).join('')}</div>`;
+        }
+      }
 
       const total = evs.length;
       return `
@@ -1083,7 +1137,7 @@ async function loadAll() {
         <div class="coming-soon-block">
           <div class="coming-soon-icon">✦</div>
           <div class="coming-soon-title">Coming soon</div>
-          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty z doświadczonymi nauczycielkami jogi.</p>
+          <p class="coming-soon-desc"></p>
         </div>`;
     } else {
       /* city chips */
