@@ -639,13 +639,6 @@
   <!-- ═══ TAB: PŁATNE ═══ -->
   <div class="tab-view" id="view-paid">
 
-    <div class="paid-hero-banner">
-      <div class="paid-hero-icon">✦</div>
-      <div class="paid-hero-text">
-        <p><strong>Kursy, retreaty i warsztaty</strong> — joga na głębszym poziomie z doświadczonymi nauczycielami.</p>
-      </div>
-    </div>
-
     <!-- City filter chips for paid -->
     <div class="paid-city-filter" id="paid-city-filter">
       <div class="paid-filter-chip active" data-city="wszystkie" onclick="filterPaid(this)">Wszystkie</div>
@@ -826,10 +819,11 @@ function isRecurring(ev) {
 function createHCard(ev) {
   const tagsHTML = renderTags(ev.tagi);
   const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
-  const tag      = hasLink ? 'a' : 'div';
-  const attrs    = hasLink ? `href="${ev.link.trim()}" target="_blank" rel="noopener"` : '';
+  const onclick  = hasLink
+    ? `onclick="window.open('${ev.link.trim()}','_blank','noopener');return false;"`
+    : `onclick="return false;" style="cursor:default"`;
   return `
-    <${tag} class="event-hcard" ${attrs}>
+    <a class="event-hcard" href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}" ${onclick}>
       <div class="event-hcard-top">
         <div class="event-date-box">
           <div class="day">${ev.dzien || '?'}</div>
@@ -844,7 +838,7 @@ function createHCard(ev) {
         </div>
       </div>
       ${tagsHTML ? `<div class="event-hcard-tags">${tagsHTML}</div>` : ''}
-    </${tag}>`;
+    </a>`;
 }
 
 /* ═══════════════════════════════════════════════
@@ -853,8 +847,9 @@ function createHCard(ev) {
 function createRecurringCard(ev) {
   const tagsHTML = renderTags(ev.tagi);
   const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
-  const tag      = hasLink ? 'a' : 'div';
-  const attrs    = hasLink ? `href="${ev.link.trim()}" target="_blank" rel="noopener"` : '';
+  const onclick  = hasLink
+    ? `onclick="window.open('${ev.link.trim()}','_blank','noopener');return false;"`
+    : `onclick="return false;" style="cursor:default"`;
   const dzienTyg = (ev.dzien_tygodnia || ev.dzien || '').trim();
   const sezon    = (ev.sezon || '').trim();
   const recurSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -864,7 +859,7 @@ function createRecurringCard(ev) {
     <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
   </svg>`;
   return `
-    <${tag} class="event-hcard" ${attrs}>
+    <a class="event-hcard" href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}" ${onclick}>
       <div class="event-hcard-top">
         <div class="recur-date-box">
           ${recurSVG}
@@ -882,7 +877,7 @@ function createRecurringCard(ev) {
         ${sezon ? `<span class="season-badge">📅 ${sezon}</span>` : ''}
         ${tagsHTML}
       </div>
-    </${tag}>`;
+    </a>`;
 }
 /* ═══════════════════════════════════════════════
    RENDER: paid event card
@@ -890,12 +885,13 @@ function createRecurringCard(ev) {
 function createPaidCard(ev, i) {
   const tagsHTML = renderTags(ev.tagi);
   const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
-  const tag      = hasLink ? 'a' : 'div';
-  const attrs    = hasLink ? `href="${ev.link.trim()}" target="_blank" rel="noopener"` : '';
+  const onclick  = hasLink
+    ? `onclick="window.open('${ev.link.trim()}','_blank','noopener');return false;"`
+    : `onclick="return false;" style="cursor:default"`;
   const typLabel = ev.typ_platnego ? ev.typ_platnego.trim() : '';
   return `
-    <${tag} class="paid-event-item" ${attrs}
-       style="animation-delay:${0.1 + i * 0.07}s"
+    <a class="paid-event-item" href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}" ${onclick}
+       style="animation-delay:${0.1 + i * 0.07}s${!hasLink ? ';cursor:default' : ''}"
        data-city="${(ev.miasto || '').toLowerCase()}">
       <div class="paid-badge">Płatne</div>
       <div class="event-date-box" style="width:44px;height:50px;border-radius:11px;">
@@ -915,7 +911,7 @@ function createPaidCard(ev, i) {
           ${typLabel ? `<span class="paid-type-tag">${typLabel}</span>` : ''}
         </div>
       </div>
-    </${tag}>`;
+    </a>`;
 }
 /* ═══════════════════════════════════════════════
    RENDER: popup
@@ -994,7 +990,7 @@ async function loadAll() {
         <div class="coming-soon-block">
           <div class="coming-soon-icon">✦</div>
           <div class="coming-soon-title">Coming soon</div>
-          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty z doświadczonymi nauczycielkami jogi.</p>
+          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty</p>
         </div>`;
       countLabel.textContent   = 'Już wkrótce';
       pinCount.textContent     = 'Mapa zostanie uzupełniona wkrótce';
@@ -1137,7 +1133,7 @@ async function loadAll() {
         <div class="coming-soon-block">
           <div class="coming-soon-icon">✦</div>
           <div class="coming-soon-title">Coming soon</div>
-          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty.</p>
+          <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty</p>
         </div>`;
     } else {
       /* city chips */
@@ -1179,7 +1175,7 @@ async function loadAll() {
   } catch (err) {
     console.error('Jogowanie load error:', err.message);
     citySectionsEl.innerHTML = `<div class="error-state"><p>⚠️ Nie udało się załadować wydarzeń.<br><small style="color:#999">${err.message}</small></p></div>`;
-    paidContainer.innerHTML  = `<div class="coming-soon-block"><div class="coming-soon-icon">✦</div><div class="coming-soon-title">Coming soon</div><p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty z doświadczonymi nauczycielkami jogi.</p></div>`;
+    paidContainer.innerHTML  = `<div class="coming-soon-block"><div class="coming-soon-icon">✦</div><div class="coming-soon-title">Coming soon</div><p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty</p></div>`;
     countLabel.textContent   = 'Błąd ładowania';
   }
 }
