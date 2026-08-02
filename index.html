@@ -808,7 +808,7 @@ function isPaid(ev) {
 
 /* ── bezpieczny href: & → &amp; żeby nie łamało atrybutu HTML ── */
 function safeHref(url) {
-  return (url || '').trim().replace(/&/g, '&amp;');
+  return (url || '').trim();
 }
 
 /* ═══════════════════════════════════════════════
@@ -1208,17 +1208,7 @@ function scrollToCity(id) {
 
 loadAll();
 
-// Delegacja kliknięć — dekoduje &amp; z powrotem na & przed otwarciem linka
-document.addEventListener('click', function(e) {
-  const a = e.target.closest('a.event-hcard, a.paid-event-item');
-  if (!a) return;
-  const href = a.getAttribute('href');
-  if (!href || href === 'javascript:void(0)') { e.preventDefault(); return; }
-  e.preventDefault();
-  // Odkoduj encje HTML (&amp; → &) przed otwarciem
-  const realUrl = href.replace(/&amp;/g, '&');
-  window.location.href = realUrl;
-});
+
 </script>
 </body>
 </html>
