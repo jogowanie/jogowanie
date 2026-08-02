@@ -819,11 +819,11 @@ function isRecurring(ev) {
 function createHCard(ev) {
   const tagsHTML = renderTags(ev.tagi);
   const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
-  const onclick  = hasLink
-    ? `onclick="window.open('${ev.link.trim()}','_blank','noopener');return false;"`
-    : `onclick="return false;" style="cursor:default"`;
   return `
-    <a class="event-hcard" href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}" ${onclick}>
+    <a class="event-hcard"
+       href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}"
+       ${hasLink ? 'target="_blank" rel="noopener noreferrer"' : ''}
+       style="${hasLink ? '' : 'cursor:default'}">
       <div class="event-hcard-top">
         <div class="event-date-box">
           <div class="day">${ev.dzien || '?'}</div>
@@ -847,9 +847,6 @@ function createHCard(ev) {
 function createRecurringCard(ev) {
   const tagsHTML = renderTags(ev.tagi);
   const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
-  const onclick  = hasLink
-    ? `onclick="window.open('${ev.link.trim()}','_blank','noopener');return false;"`
-    : `onclick="return false;" style="cursor:default"`;
   const dzienTyg = (ev.dzien_tygodnia || ev.dzien || '').trim();
   const sezon    = (ev.sezon || '').trim();
   const recurSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -859,7 +856,10 @@ function createRecurringCard(ev) {
     <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
   </svg>`;
   return `
-    <a class="event-hcard" href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}" ${onclick}>
+    <a class="event-hcard"
+       href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}"
+       ${hasLink ? 'target="_blank" rel="noopener noreferrer"' : ''}
+       style="${hasLink ? '' : 'cursor:default'}">
       <div class="event-hcard-top">
         <div class="recur-date-box">
           ${recurSVG}
@@ -885,13 +885,12 @@ function createRecurringCard(ev) {
 function createPaidCard(ev, i) {
   const tagsHTML = renderTags(ev.tagi);
   const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
-  const onclick  = hasLink
-    ? `onclick="window.open('${ev.link.trim()}','_blank','noopener');return false;"`
-    : `onclick="return false;" style="cursor:default"`;
   const typLabel = ev.typ_platnego ? ev.typ_platnego.trim() : '';
   return `
-    <a class="paid-event-item" href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}" ${onclick}
-       style="animation-delay:${0.1 + i * 0.07}s${!hasLink ? ';cursor:default' : ''}"
+    <a class="paid-event-item"
+       href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}"
+       ${hasLink ? 'target="_blank" rel="noopener noreferrer"' : ''}
+       style="animation-delay:${0.1 + i * 0.07}s${hasLink ? '' : ';cursor:default'}"
        data-city="${(ev.miasto || '').toLowerCase()}">
       <div class="paid-badge">Płatne</div>
       <div class="event-date-box" style="width:44px;height:50px;border-radius:11px;">
@@ -1200,6 +1199,17 @@ function scrollToCity(id) {
 }
 
 loadAll();
+
+// Delegacja kliknięć — działa niezawodnie nawet dla linków
+// generowanych dynamicznie przez innerHTML
+document.addEventListener('click', function(e) {
+  const a = e.target.closest('a.event-hcard, a.paid-event-item');
+  if (!a) return;
+  const href = a.getAttribute('href');
+  if (!href || href === 'javascript:void(0)') { e.preventDefault(); return; }
+  e.preventDefault();
+  window.open(href, '_blank', 'noopener,noreferrer');
+});
 </script>
 </body>
 </html>
