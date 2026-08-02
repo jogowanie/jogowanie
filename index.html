@@ -806,6 +806,11 @@ function isPaid(ev) {
   return cena !== '' && cena !== '0' && cena !== 'gratis' && cena !== 'bezpłatne' && cena !== 'bezplatne';
 }
 
+/* ── bezpieczny href: & → &amp; żeby nie łamało atrybutu HTML ── */
+function safeHref(url) {
+  return (url || '').trim().replace(/&/g, '&amp;');
+}
+
 /* ═══════════════════════════════════════════════
    HELPERS: is recurring?
 ═══════════════════════════════════════════════ */
@@ -818,10 +823,11 @@ function isRecurring(ev) {
 ═══════════════════════════════════════════════ */
 function createHCard(ev) {
   const tagsHTML = renderTags(ev.tagi);
-  const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
+  const rawLink  = (ev.link || '').trim();
+  const hasLink  = rawLink !== '' && rawLink !== '#';
   return `
     <a class="event-hcard"
-       href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}"
+       href="${hasLink ? safeHref(rawLink) : 'javascript:void(0)'}"
        ${hasLink ? 'target="_blank" rel="noopener noreferrer"' : ''}
        style="${hasLink ? '' : 'cursor:default'}">
       <div class="event-hcard-top">
@@ -846,7 +852,8 @@ function createHCard(ev) {
 ═══════════════════════════════════════════════ */
 function createRecurringCard(ev) {
   const tagsHTML = renderTags(ev.tagi);
-  const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
+  const rawLink  = (ev.link || '').trim();
+  const hasLink  = rawLink !== '' && rawLink !== '#';
   const dzienTyg = (ev.dzien_tygodnia || ev.dzien || '').trim();
   const sezon    = (ev.sezon || '').trim();
   const recurSVG = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none"
@@ -857,7 +864,7 @@ function createRecurringCard(ev) {
   </svg>`;
   return `
     <a class="event-hcard"
-       href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}"
+       href="${hasLink ? safeHref(rawLink) : 'javascript:void(0)'}"
        ${hasLink ? 'target="_blank" rel="noopener noreferrer"' : ''}
        style="${hasLink ? '' : 'cursor:default'}">
       <div class="event-hcard-top">
@@ -884,11 +891,12 @@ function createRecurringCard(ev) {
 ═══════════════════════════════════════════════ */
 function createPaidCard(ev, i) {
   const tagsHTML = renderTags(ev.tagi);
-  const hasLink  = ev.link && ev.link.trim() !== '' && ev.link.trim() !== '#';
+  const rawLink  = (ev.link || '').trim();
+  const hasLink  = rawLink !== '' && rawLink !== '#';
   const typLabel = ev.typ_platnego ? ev.typ_platnego.trim() : '';
   return `
     <a class="paid-event-item"
-       href="${hasLink ? ev.link.trim() : 'javascript:void(0)'}"
+       href="${hasLink ? safeHref(rawLink) : 'javascript:void(0)'}"
        ${hasLink ? 'target="_blank" rel="noopener noreferrer"' : ''}
        style="animation-delay:${0.1 + i * 0.07}s${hasLink ? '' : ';cursor:default'}"
        data-city="${(ev.miasto || '').toLowerCase()}">
@@ -1200,15 +1208,16 @@ function scrollToCity(id) {
 
 loadAll();
 
-// Delegacja kliknięć — działa niezawodnie nawet dla linków
-// generowanych dynamicznie przez innerHTML
+// Delegacja kliknięć — dekoduje &amp; z powrotem na & przed otwarciem linka
 document.addEventListener('click', function(e) {
   const a = e.target.closest('a.event-hcard, a.paid-event-item');
   if (!a) return;
   const href = a.getAttribute('href');
   if (!href || href === 'javascript:void(0)') { e.preventDefault(); return; }
   e.preventDefault();
-  window.open(href, '_blank', 'noopener,noreferrer');
+  // Odkoduj encje HTML (&amp; → &) przed otwarciem
+  const realUrl = href.replace(/&amp;/g, '&');
+  window.location.href = realUrl;
 });
 </script>
 </body>
