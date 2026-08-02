@@ -797,11 +797,7 @@ function parseCSV(text) {
     return obj;
   }).filter(row => row.nazwa && row.nazwa.length > 0);
 }
-  function createEventCard(ev, i) {
-    const tagsHTML = renderTags(ev.tagi);
-    return `
-      <a class="event-item" href="${ev.link || '#'}" style="animation-delay:${0.25 + i * 0.07}s"
-         ${ev.link && ev.link !== '#' ? 'target="_blank"' : ''}>
+
 /* ═══════════════════════════════════════════════
    HELPERS: is paid?
 ═══════════════════════════════════════════════ */
