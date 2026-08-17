@@ -783,7 +783,7 @@ function renderTags(tagsStr) {
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   if (lines.length < 2) return [];
-  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
+  const headers = lines[0].split(',').map(h => h.replace(/[^a-zA-Ząćęłńóśźż0-9_]/g, '').toLowerCase());
   return lines.slice(1).map(line => {
     const cols = []; let cur = '', inQ = false;
     for (let ch of line) {
@@ -961,6 +961,15 @@ function filterPaid(chip) {
     } else {
       card.style.display = 'none';
     }
+  });
+  /* schowaj etykietę i pustą listę, jeśli po filtrze nie ma w niej żadnej karty */
+  ['jednorazowe', 'cykliczne'].forEach(group => {
+    const list  = document.getElementById('paid-list-' + group);
+    const label = document.getElementById('paid-label-' + group);
+    if (!list || !label) return;
+    const hasVisible = [...list.children].some(card => card.style.display !== 'none');
+    list.style.display  = hasVisible ? '' : 'none';
+    label.style.display = hasVisible ? '' : 'none';
   });
 }
 
@@ -1154,8 +1163,28 @@ async function loadAll() {
         paidCityFilter.appendChild(chip);
       });
 
+      /* podział: jednorazowe / cykliczne — jak w sekcji Bezpłatne */
+      const oneTimePaid   = paidEvents.filter(e => !isRecurring(e));
+      const recurringPaid = paidEvents.filter(e => isRecurring(e));
+
+      const oneTimePaidHTML = oneTimePaid.length > 0
+        ? `<div class="subsection-label" id="paid-label-jednorazowe">
+             <span class="subsection-label-text">Jednorazowe</span>
+             <div class="subsection-label-line"></div>
+           </div>
+           <div class="events-list" id="paid-list-jednorazowe">${oneTimePaid.map((e, i) => createPaidCard(e, i)).join('')}</div>`
+        : '';
+
+      const recurringPaidHTML = recurringPaid.length > 0
+        ? `<div class="subsection-pill" id="paid-label-cykliczne">
+             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+             Cykliczne
+           </div>
+           <div class="events-list" id="paid-list-cykliczne">${recurringPaid.map((e, i) => createPaidCard(e, i)).join('')}</div>`
+        : '';
+
       /* paid cards */
-      paidContainer.innerHTML = `<div class="events-list">${paidEvents.map((e, i) => createPaidCard(e, i)).join('')}</div>`;
+      paidContainer.innerHTML = oneTimePaidHTML + recurringPaidHTML;
     }
 
     /* ── Map: all events ── */
