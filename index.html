@@ -741,11 +741,9 @@ L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
 }).addTo(map);
 
-// Mapa płatnych wydarzeń
-const paidMap = L.map('paid-map', { zoomControl: true, scrollWheelZoom: false }).setView([52.22, 21.01], 12);
-L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-  attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
-}).addTo(paidMap);
+// Mapa płatnych wydarzeń – inicjalizowana lazy przy pierwszym otwarciu zakładki
+let paidMap = null;
+let paidMapReady = false;
 
 const sunPinIcon = L.divIcon({
   className: '',
@@ -972,11 +970,38 @@ function switchTab(tab) {
   document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('view-' + tab).classList.add('visible');
   document.getElementById('tab-' + tab).classList.add('active');
-  // Leaflet wymaga odświeżenia rozmiaru gdy mapa była ukryta
+
   setTimeout(() => {
-    if (tab === 'free')  map.invalidateSize();
-    if (tab === 'paid') paidMap.invalidateSize();
-  }, 50);
+    if (tab === 'free') {
+      map.invalidateSize();
+    }
+    if (tab === 'paid') {
+      if (!paidMapReady) {
+        // Pierwsza inicjalizacja – teraz element jest widoczny
+        paidMap = L.map('paid-map', { zoomControl: true, scrollWheelZoom: false })
+                   .setView([52.22, 21.01], 12);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+          attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
+        }).addTo(paidMap);
+        paidMapReady = true;
+        // Dodaj pinezki które były gotowe przed inicjalizacją
+        if (window._paidPinsData) {
+          const bounds = [];
+          window._paidPinsData.forEach(({ lat, lng, popup }) => {
+            L.marker([lat, lng], { icon: sunPinIcon })
+              .addTo(paidMap)
+              .bindPopup(popup, { maxWidth: 240 });
+            bounds.push([lat, lng]);
+          });
+          if (bounds.length > 0) {
+            paidMap.fitBounds(bounds, { padding: [40, 40], maxZoom: 13 });
+          }
+        }
+      } else {
+        paidMap.invalidateSize();
+      }
+    }
+  }, 80);
 }
 
 /* ═══════════════════════════════════════════════
@@ -1048,8 +1073,10 @@ async function loadAll() {
       cityMap[city].push(ev);
     });
 
-    /* coming soon cities – MUSI być przed użyciem extraCities */
-    const COMING_SOON_CITIES = ['Kraków', 'Wrocław', 'Trójmiasto', 'Poznań'];
+    /* coming soon cities – tylko jeśli są w COMING_SOON_CITIES
+       I nie ma dla nich żadnych wydarzeń bezpłatnych.
+       Ustaw pustą tablicę żeby wyłączyć sekcje coming soon dla miast. */
+    const COMING_SOON_CITIES = []; // ← wyczyść listę; przywróć miasta gdy będą gotowe
     const existingCities = new Set(cityOrder);
     const extraCities = COMING_SOON_CITIES.filter(c => !existingCities.has(c));
 
@@ -1177,7 +1204,7 @@ async function loadAll() {
           <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty</p>
         </div>`;
       paidMapSection.style.display = 'none';
-      paidMap._container.parentElement.style.display = 'none';
+      document.querySelector('#paid-map').closest('.map-wrapper').style.display = 'none';
       paidMapPinCount.textContent = 'Brak wydarzeń';
     } else {
       // Chipsy tylko dla miast które mają co najmniej jedno płatne wydarzenie
@@ -1200,20 +1227,17 @@ async function loadAll() {
       /* paid cards */
       paidContainer.innerHTML = `<div class="events-list">${paidEvents.map((e, i) => createPaidCard(e, i)).join('')}</div>`;
 
-      /* pinezki na mapie płatnych */
+      /* zapisz dane pinezek – mapa inicjalizuje się lazy przy pierwszym otwarciu zakładki */
       let paidPins = 0;
-      const paidBounds = [];
+      window._paidPinsData = [];
       paidEvents.forEach(ev => {
         const lat = parseFloat(ev.lat), lng = parseFloat(ev.lng);
         if (!isNaN(lat) && !isNaN(lng)) {
-          L.marker([lat, lng], { icon: sunPinIcon }).addTo(paidMap)
-            .bindPopup(createPopup(ev), { maxWidth: 240 });
-          paidBounds.push([lat, lng]);
+          window._paidPinsData.push({ lat, lng, popup: createPopup(ev) });
           paidPins++;
         }
       });
       if (paidPins > 0) {
-        paidMap.fitBounds(paidBounds, { padding: [40, 40], maxZoom: 13 });
         paidMapPinCount.textContent = `${paidPins} wydarzeń na mapie`;
       } else {
         paidMapPinCount.textContent = 'Dodaj kolumny lat i lng do arkusza';
