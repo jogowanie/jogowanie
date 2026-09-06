@@ -653,6 +653,26 @@
       </div>
     </div>
 
+    <!-- Paid map -->
+    <div class="section-title" style="margin-top:8px" id="paid-map-section">Mapa wydarzeń</div>
+    <div class="map-wrapper">
+      <div class="map-header">
+        <div class="map-header-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+            <line x1="8" y1="2" x2="8" y2="18"/>
+            <line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+        </div>
+        <div class="map-header-text">
+          <p>Gdzie jogujemy?</p>
+          <small id="paid-map-pin-count">Ładowanie pinezek...</small>
+        </div>
+      </div>
+      <div id="paid-map"></div>
+      <div class="map-hint">Kliknij pinezkę, aby zobaczyć szczegóły</div>
+    </div>
+
   </div><!-- /view-paid -->
 
   <!-- ═══ LINKS ═══ -->
@@ -694,7 +714,7 @@ const CONFIG = {
   /*
    * Google Sheets CSV – teraz musi zawierać kolumny:
    *   nazwa, dzien, miesiac, godzina, miasto, dzielnica, lokalizacja,
-   *   lat, lng, link, tagi, cena, typ_platnego, link
+   *   lat, lng, link, tagi, cena, typ_platnego
    *
    * Kolumna "cena":
    *   - pusta lub "0" lub "gratis"  → bezpłatne  (pojawi się w zakładce Bezpłatne)
@@ -720,6 +740,12 @@ const map = L.map('map', { zoomControl: true, scrollWheelZoom: false }).setView(
 L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
   attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
 }).addTo(map);
+
+// Mapa płatnych wydarzeń
+const paidMap = L.map('paid-map', { zoomControl: true, scrollWheelZoom: false }).setView([52.22, 21.01], 12);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '© OpenStreetMap, © CARTO', maxZoom: 18
+}).addTo(paidMap);
 
 const sunPinIcon = L.divIcon({
   className: '',
@@ -783,7 +809,7 @@ function renderTags(tagsStr) {
 function parseCSV(text) {
   const lines = text.trim().split('\n');
   if (lines.length < 2) return [];
-  const headers = lines[0].split(',').map(h => h.replace(/[^a-zA-Ząćęłńóśźż0-9_]/g, '').toLowerCase());
+  const headers = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/"/g, ''));
   return lines.slice(1).map(line => {
     const cols = []; let cur = '', inQ = false;
     for (let ch of line) {
@@ -808,7 +834,7 @@ function isPaid(ev) {
 
 /* ── bezpieczny href: & → &amp; żeby nie łamało atrybutu HTML ── */
 function safeHref(url) {
-  return (url || '').trim();
+  return (url || '').trim().replace(/&/g, '&amp;');
 }
 
 /* ═══════════════════════════════════════════════
@@ -946,6 +972,11 @@ function switchTab(tab) {
   document.querySelectorAll('.main-tab').forEach(t => t.classList.remove('active'));
   document.getElementById('view-' + tab).classList.add('visible');
   document.getElementById('tab-' + tab).classList.add('active');
+  // Leaflet wymaga odświeżenia rozmiaru gdy mapa była ukryta
+  setTimeout(() => {
+    if (tab === 'free')  map.invalidateSize();
+    if (tab === 'paid') paidMap.invalidateSize();
+  }, 50);
 }
 
 /* ═══════════════════════════════════════════════
@@ -961,15 +992,6 @@ function filterPaid(chip) {
     } else {
       card.style.display = 'none';
     }
-  });
-  /* schowaj etykietę i pustą listę, jeśli po filtrze nie ma w niej żadnej karty */
-  ['jednorazowe', 'cykliczne'].forEach(group => {
-    const list  = document.getElementById('paid-list-' + group);
-    const label = document.getElementById('paid-label-' + group);
-    if (!list || !label) return;
-    const hasVisible = [...list.children].some(card => card.style.display !== 'none');
-    list.style.display  = hasVisible ? '' : 'none';
-    label.style.display = hasVisible ? '' : 'none';
   });
 }
 
@@ -1144,6 +1166,9 @@ async function loadAll() {
     countLabel.textContent = `${freeEvents.length} bezpłatnych wydarzeń`;
 
     /* ── Paid tab ── */
+    const paidMapPinCount = document.getElementById('paid-map-pin-count');
+    const paidMapSection  = document.getElementById('paid-map-section');
+
     if (paidEvents.length === 0) {
       paidContainer.innerHTML = `
         <div class="coming-soon-block">
@@ -1151,10 +1176,19 @@ async function loadAll() {
           <div class="coming-soon-title">Coming soon</div>
           <p class="coming-soon-desc">Już wkrótce kursy, retreaty i warsztaty</p>
         </div>`;
+      paidMapSection.style.display = 'none';
+      paidMap._container.parentElement.style.display = 'none';
+      paidMapPinCount.textContent = 'Brak wydarzeń';
     } else {
-      /* city chips */
-      const paidCities = [...new Set(paidEvents.map(e => (e.miasto || '').trim()).filter(Boolean))];
-      paidCities.forEach(city => {
+      // Chipsy tylko dla miast które mają co najmniej jedno płatne wydarzenie
+      // Warszawa zawsze na początku jeśli ma wydarzenia; reszta tylko jeśli jest co pokazać
+      const paidCityMap = {};
+      paidEvents.forEach(e => {
+        const c = (e.miasto || '').trim();
+        if (c) paidCityMap[c] = (paidCityMap[c] || 0) + 1;
+      });
+      // "Wszystkie" zawsze jest; dodaj miasta tylko z co najmniej 1 wydarzeniem
+      Object.keys(paidCityMap).forEach(city => {
         const chip = document.createElement('div');
         chip.className = 'paid-filter-chip';
         chip.dataset.city = city.toLowerCase();
@@ -1163,28 +1197,27 @@ async function loadAll() {
         paidCityFilter.appendChild(chip);
       });
 
-      /* podział: jednorazowe / cykliczne — jak w sekcji Bezpłatne */
-      const oneTimePaid   = paidEvents.filter(e => !isRecurring(e));
-      const recurringPaid = paidEvents.filter(e => isRecurring(e));
-
-      const oneTimePaidHTML = oneTimePaid.length > 0
-        ? `<div class="subsection-label" id="paid-label-jednorazowe">
-             <span class="subsection-label-text">Jednorazowe</span>
-             <div class="subsection-label-line"></div>
-           </div>
-           <div class="events-list" id="paid-list-jednorazowe">${oneTimePaid.map((e, i) => createPaidCard(e, i)).join('')}</div>`
-        : '';
-
-      const recurringPaidHTML = recurringPaid.length > 0
-        ? `<div class="subsection-pill" id="paid-label-cykliczne">
-             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#E8C96A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-             Cykliczne
-           </div>
-           <div class="events-list" id="paid-list-cykliczne">${recurringPaid.map((e, i) => createPaidCard(e, i)).join('')}</div>`
-        : '';
-
       /* paid cards */
-      paidContainer.innerHTML = oneTimePaidHTML + recurringPaidHTML;
+      paidContainer.innerHTML = `<div class="events-list">${paidEvents.map((e, i) => createPaidCard(e, i)).join('')}</div>`;
+
+      /* pinezki na mapie płatnych */
+      let paidPins = 0;
+      const paidBounds = [];
+      paidEvents.forEach(ev => {
+        const lat = parseFloat(ev.lat), lng = parseFloat(ev.lng);
+        if (!isNaN(lat) && !isNaN(lng)) {
+          L.marker([lat, lng], { icon: sunPinIcon }).addTo(paidMap)
+            .bindPopup(createPopup(ev), { maxWidth: 240 });
+          paidBounds.push([lat, lng]);
+          paidPins++;
+        }
+      });
+      if (paidPins > 0) {
+        paidMap.fitBounds(paidBounds, { padding: [40, 40], maxZoom: 13 });
+        paidMapPinCount.textContent = `${paidPins} wydarzeń na mapie`;
+      } else {
+        paidMapPinCount.textContent = 'Dodaj kolumny lat i lng do arkusza';
+      }
     }
 
     /* ── Map: all events ── */
@@ -1237,7 +1270,17 @@ function scrollToCity(id) {
 
 loadAll();
 
-
+// Delegacja kliknięć — dekoduje &amp; z powrotem na & przed otwarciem linka
+document.addEventListener('click', function(e) {
+  const a = e.target.closest('a.event-hcard, a.paid-event-item');
+  if (!a) return;
+  const href = a.getAttribute('href');
+  if (!href || href === 'javascript:void(0)') { e.preventDefault(); return; }
+  e.preventDefault();
+  // Odkoduj encje HTML (&amp; → &) przed otwarciem
+  const realUrl = href.replace(/&amp;/g, '&');
+  window.location.href = realUrl;
+});
 </script>
 </body>
 </html>
